@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WordTestActivity">
+        <activity android:name=".VocaMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
