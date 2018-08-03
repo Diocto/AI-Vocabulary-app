@@ -1,6 +1,7 @@
 package org.andoidtown.ai_vocabulary;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,8 @@ import java.util.ArrayList;
 
 public class AddWGListViewAdpater extends BaseAdapter {
     private ArrayList<AddWGListViewItem> listView = new ArrayList<>();
-
+    final static int IS_CLICKED_ONCE = 0;
+    final static int IS_NOT_CLICKED = 1;
     public AddWGListViewAdpater() {
 
     }
@@ -42,12 +44,30 @@ public class AddWGListViewAdpater extends BaseAdapter {
 
         }
 
-        AddWGListViewItem addWordItem = listView.get(i);
 
         return convertView;
     }
-    public void addView()
+    public  void addBottomEditText(View view){
+        if(view == null)
+        {
+            Log.d("user","view is null");
+            return;
+        }
+        else
+        {
+            Log.d("user",view.toString());
+        }
+        if(view.getTag() == null) {
+            Log.d("user","view tag is null");
+            view.setTag(IS_CLICKED_ONCE);
+            addEditText();
+            notifyDataSetChanged();
+        }
+    }
+    public void addEditText()
     {
-        listView.add(new AddWGListViewItem());
+        AddWGListViewItem newItem = new AddWGListViewItem();
+        listView.add(newItem);
+
     }
 }

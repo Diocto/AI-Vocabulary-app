@@ -21,4 +21,5 @@ public class WordListViewActivity extends AppCompatActivity {
         adapter.addItem("testName","testNum","testNotNum");
 
     }
+
 }
