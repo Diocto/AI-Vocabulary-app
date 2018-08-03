@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".managementWordsFragment">
+    tools:context=".ManagementWordsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -33,14 +33,14 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/lookWordsListButton"
+                    android:id="@+id/showWordsListButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="단어목록 보기" />
 
                 <Button
-                    android:id="@+id/lookTestLogButton"
+                    android:id="@+id/showTestLogButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
