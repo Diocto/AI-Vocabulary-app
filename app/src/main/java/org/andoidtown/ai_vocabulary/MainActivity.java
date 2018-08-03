@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class VocaMainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     ViewPager mainVP;
     Button graphTapButton;
     Button testTapButton;
@@ -16,7 +16,7 @@ public class VocaMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voca_main);
+        setContentView(R.layout.activity_main);
 
         mainVP = findViewById(R.id.mainViewPager);
         graphTapButton = findViewById(R.id.growthGraphTapButton);
