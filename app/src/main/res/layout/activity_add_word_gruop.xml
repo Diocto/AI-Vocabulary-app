@@ -4,6 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addWordGruopActivity">
+    tools:context=".AddWordGruopActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/cancelAddButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="취소"
+                app:layout_constraintEnd_toStartOf="@+id/AddWordTitle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/addWGToDBButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="등록"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/AddWordTitle" />
+
+            <TextView
+                android:id="@+id/AddWordTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="29dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:text="단어추가하기"
+                app:layout_constraintBottom_toTopOf="@id/tmpTitle"
+                app:layout_constraintEnd_toStartOf="@+id/addWGToDBButton"
+                app:layout_constraintStart_toEndOf="@+id/cancelAddButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <TextView
+                android:id="@+id/tmpTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="x년 x월 x일"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/addWGToDBButton"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toEndOf="@+id/cancelAddButton"
+                app:layout_constraintTop_toBottomOf="@id/AddWordTitle" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <ListView
+            android:id="@+id/addWordListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

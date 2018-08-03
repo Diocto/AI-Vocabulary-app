@@ -9,7 +9,7 @@ public class WordListViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_word_list);
+        setContentView(R.layout.activity_word_group_list);
 
         ListView listView;
         WordListViewAdapter adapter;

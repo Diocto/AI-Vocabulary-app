@@ -20,6 +20,7 @@ import android.widget.Button;
 public class ManagementWordsFragment extends Fragment {
 
     Button showWordGroupListButton;
+    Button showAddWGListViewButton;
     public ManagementWordsFragment() {
         // Required empty public constructor
     }
@@ -43,7 +44,15 @@ public class ManagementWordsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        showAddWGListViewButton = rootView.findViewById(R.id.addWordButton);
+        showAddWGListViewButton.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(getActivity(), AddWordGruopActivity.class);
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
