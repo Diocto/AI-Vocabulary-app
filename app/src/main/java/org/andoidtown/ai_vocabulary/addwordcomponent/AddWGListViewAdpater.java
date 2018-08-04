@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.addwordcomponent;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import org.andoidtown.ai_vocabulary.R;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class AddWGListViewAdpater extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public AddWGListViewItem getItem(int i) {
         return listView.get(i);
     }
 

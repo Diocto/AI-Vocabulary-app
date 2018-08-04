@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.mainactivitycomponent;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.andoidtown.ai_vocabulary.R;
 
 
 public class AchievementGraphFragment extends Fragment {

@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.addwordcomponent;
 
 public class AddWGListViewItem {
     private String word;

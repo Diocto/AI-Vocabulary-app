@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.wordlistviewcomponent;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.andoidtown.ai_vocabulary.R;
+
 import java.util.ArrayList;
 
-public class WordListViewAdapter extends BaseAdapter {
-    private ArrayList<WordsListViewItem> wordLists = new ArrayList<>();
+public class WordGroupListViewAdapter extends BaseAdapter {
+    private ArrayList<WordGroupListViewItem> wordLists = new ArrayList<>();
 
-    public WordListViewAdapter(){
+    public WordGroupListViewAdapter(){
     }
     @Override
     public int getCount() {
@@ -37,14 +39,14 @@ public class WordListViewAdapter extends BaseAdapter {
         if (convertView == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.word_listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.word_group_listview_item, parent, false);
         }
 
         TextView wordGroupName = (TextView) convertView.findViewById(R.id.wordListName);
         TextView memNumber = (TextView) convertView.findViewById(R.id.memWordsNum);
         TextView notMemNumber =  (TextView) convertView.findViewById(R.id.notMemWordsNum);
 
-        WordsListViewItem listItem = wordLists.get(i);
+        WordGroupListViewItem listItem = wordLists.get(i);
 
         wordGroupName.setText(listItem.getItemName());
         memNumber.setText(listItem.getMemorizedNumber());
@@ -54,7 +56,7 @@ public class WordListViewAdapter extends BaseAdapter {
 
     public void addItem(String name, String memNum, String notMemNum)
     {
-        WordsListViewItem item = new WordsListViewItem();
+        WordGroupListViewItem item = new WordGroupListViewItem();
         item.setItemName(name);
         item.setMemorizedNumber(memNum);
         item.setNotMemorizedNumber(notMemNum);

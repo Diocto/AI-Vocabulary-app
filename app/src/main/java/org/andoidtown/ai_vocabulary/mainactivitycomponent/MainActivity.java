@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.mainactivitycomponent;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import org.andoidtown.ai_vocabulary.R;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager mainVP;
@@ -57,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void createWordTable() {
         try{
-
+            db.execSQL("drop table word");
             db.execSQL("create table word(" +
                     "value text," +
                     "meaning text," +
-                    "correct_answser_num integer," +
+                    "correct_answer_num integer," +
                     "incorrect_answer_num integer," +
-                    "proununsation text" +
+                    "group_name text" +
                     "" +
                     ");");
         }
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private void createWordGroupTable()
     {
         try{
+            db.execSQL("drop table word_group");
             db.execSQL("create table word_group (" +
                     "group_name text," +
                     "registered_data datetime," +
@@ -90,11 +93,13 @@ public class MainActivity extends AppCompatActivity {
     private void createWordTestTable()
     {
         try{
+            db.execSQL("drop table word_test");
             db.execSQL("create table word_test (" +
                     "test_date date," +
                     "correct_answer_num integer," +
                     "incorrect_answer_num integer," +
-                    "testTime datetime" +
+                    "test_time datetime," +
+                    "group_name text" +
                     ")");
         }
         catch (Exception ex)

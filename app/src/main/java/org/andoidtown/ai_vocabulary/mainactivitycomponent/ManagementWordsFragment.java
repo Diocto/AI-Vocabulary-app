@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.mainactivitycomponent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import org.andoidtown.ai_vocabulary.addwordcomponent.AddWordGruopActivity;
+import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.wordlistviewcomponent.WordGroupListViewActivity;
 
 
 /**
@@ -40,7 +44,7 @@ public class ManagementWordsFragment extends Fragment {
         showWordGroupListButton.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), WordListViewActivity.class);
+                Intent intent = new Intent(getActivity(), WordGroupListViewActivity.class);
                 startActivity(intent);
             }
         });

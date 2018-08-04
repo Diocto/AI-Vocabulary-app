@@ -1,6 +1,6 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.wordlistviewcomponent;
 
-public class WordsListViewItem {
+public class WordGroupListViewItem {
     private String itemName;
     private String memorizedNumber;
     private String notMemorizedNumber;
