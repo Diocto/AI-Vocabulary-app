@@ -12,8 +12,10 @@ import org.andoidtown.ai_vocabulary.R;
 import java.util.ArrayList;
 
 public class WordListViewAdapter extends BaseAdapter{
-    ArrayList<WordListViewItem> wordList = new ArrayList<>();
+    private ArrayList<WordListViewItem> wordList = new ArrayList<>();
 
+    public WordListViewAdapter() {
+    }
     @Override
     public int getCount() {
         return wordList.size();

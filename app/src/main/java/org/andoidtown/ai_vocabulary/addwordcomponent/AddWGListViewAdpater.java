@@ -12,11 +12,18 @@ import org.andoidtown.ai_vocabulary.R;
 import java.util.ArrayList;
 
 public class AddWGListViewAdpater extends BaseAdapter {
-    private ArrayList<AddWGListViewItem> listView = new ArrayList<>();
+    private ArrayList<AddWGListViewItem> listView ;
+    private ArrayList<View> editList = new ArrayList<>();
+    private Context context;
     final static int IS_CLICKED_ONCE = 0;
     final static int IS_NOT_CLICKED = 1;
-    public AddWGListViewAdpater() {
-
+    public AddWGListViewAdpater(Context context, ArrayList<AddWGListViewItem> listView) {
+        this.listView = listView;
+        this.context = context;
+    }
+    public View getEditText(int index)
+    {
+        return editList.get(index);
     }
 
     @Override
@@ -43,7 +50,7 @@ public class AddWGListViewAdpater extends BaseAdapter {
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.word_add_listview_item,parent,false);
-
+            editList.add(convertView);
         }
 
 
@@ -70,6 +77,5 @@ public class AddWGListViewAdpater extends BaseAdapter {
     {
         AddWGListViewItem newItem = new AddWGListViewItem();
         listView.add(newItem);
-
     }
 }
