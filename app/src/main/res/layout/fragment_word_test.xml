@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".mainactivitycomponent.WordTestFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
 
     <ScrollView
         android:layout_width="match_parent"
