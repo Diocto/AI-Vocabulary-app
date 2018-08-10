@@ -14,7 +14,7 @@ import org.andoidtown.ai_vocabulary.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 public class AddWordGruopActivity extends AppCompatActivity {
     Button cancelButton;
@@ -55,9 +55,6 @@ public class AddWordGruopActivity extends AppCompatActivity {
 
     public void onClickAddWGButton(View view)
     {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        String today = dateFormat.format(date);
         SQLiteDatabase db;
         try{
             db = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
@@ -66,7 +63,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
             ex.printStackTrace();
             return;
         }
-        String subSQL = "insert into word(value, meaning, correct_answer_num, incorrect_answer_num, group_name)";
+
         for (int i = 0; i < adapter.getCount(); i++)
         {
             View editTextItem = adapter.getEditText(i);
@@ -74,25 +71,39 @@ public class AddWordGruopActivity extends AppCompatActivity {
             EditText meaningEditText = editTextItem.findViewById(R.id.add_meaning_editText);
             String word = wordEditText.getText().toString();
             String meaning = meaningEditText.getText().toString();
-            try{
-                    if(word != null && meaning !=null)
-                       db.execSQL(subSQL + " values ('" + word + "','" + meaning  + "',0,0," + Integer.toString(addNum) +")");
-                } catch(Exception ex)
-                {
-                    ex.printStackTrace();
-                    return;
-                }
+
+            insertWordToSQL(db, word, meaning,Integer.toString(addNum));
         }
-        String values[] = {Integer.toString(addNum++), today, "0"};
+        insertWGToDB(Integer.toString(addNum), db);
+
+        finish();
+        return;
+    }
+
+    private void insertWGToDB(String groupName, SQLiteDatabase db) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        String today = dateFormat.format(cal.getTime());
+        String testDay = dateFormat.format(cal.getTime());
+        String values[] = {Integer.toString(addNum++), today,testDay};
         try{
-            db.execSQL("insert into word_group(group_name, registered_data, num_of_test) values(?, ?, ?)",values);
+            db.execSQL("insert into word_group(group_name, registered_date, next_test_date)" +
+                    "values(?, ?, ?)",values);
             Toast.makeText(this,"단어 추가가 완료되었습니다", Toast.LENGTH_LONG).show();
         }catch (Exception ex)
         {
             Log.d("sqlerror",ex.toString());
         }
+    }
 
-        finish();
-        return;
+    private void insertWordToSQL(SQLiteDatabase db, String word, String meaning, String group_name) {
+        String subSQL = "insert into word(value, meaning, correct_answer_num, incorrect_answer_num, group_name)";
+        try{
+            if(!word.equals("") && !meaning.equals(""))
+               db.execSQL(subSQL + " values ('" + word + "','" + meaning  + "',0,0,'" + group_name +"')");
+        } catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }

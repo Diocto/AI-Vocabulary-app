@@ -1,7 +1,9 @@
-package org.andoidtown.ai_vocabulary;
+package org.andoidtown.ai_vocabulary.wordtestcomponent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import org.andoidtown.ai_vocabulary.R;
 
 public class IncorrectWordListActivity extends AppCompatActivity {
 

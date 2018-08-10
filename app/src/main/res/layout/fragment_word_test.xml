@@ -24,12 +24,12 @@
 
             <Button
                 android:id="@+id/testWordButton"
-                android:layout_margin="40dp"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:text="x월 x일자 테스트\n\n외울 단어수 : xx\n\n시험 시작하기"
-                android:background="@mipmap/ic_launcher_round" />
+                android:layout_margin="40dp"
+                android:background="@mipmap/ic_launcher_round"
+                android:text="x월 x일자 테스트\n\n외울 단어수 : xx\n\n시험 시작하기" />
 
             <LinearLayout
                 android:layout_width="match_parent"

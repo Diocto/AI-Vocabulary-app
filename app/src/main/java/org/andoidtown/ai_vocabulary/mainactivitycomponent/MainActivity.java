@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void createWordTable() {
         try{
-            db.execSQL("drop table word");
             db.execSQL("create table word(" +
                     "value text," +
                     "meaning text," +
@@ -77,12 +76,11 @@ public class MainActivity extends AppCompatActivity {
     private void createWordGroupTable()
     {
         try{
-            db.execSQL("drop table word_group");
             db.execSQL("create table word_group (" +
                     "group_name text," +
-                    "registered_data datetime," +
-                    "num_of_test integer" +
-                    ")");
+                    "registered_date datetime," +
+                    "num_of_test integer," +
+                    "next_test_date datetime)");
         }
         catch(Exception ex)
         {
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     private void createWordTestTable()
     {
         try{
-            db.execSQL("drop table word_test");
             db.execSQL("create table word_test (" +
                     "test_date date," +
                     "correct_answer_num integer," +

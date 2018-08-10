@@ -42,10 +42,9 @@ public class WordGroupListViewActivity extends AppCompatActivity {
     {
         SQLiteDatabase db = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
         String aSQL = "select * from word_group";
-        Cursor cursor = db.rawQuery(aSQL, null);
-
-        Log.d("커서 갯수",Integer.toString(cursor.getColumnCount()));
         try {
+            Cursor cursor = db.rawQuery(aSQL, null);
+            Log.d("커서 갯수",Integer.toString(cursor.getColumnCount()));
             for(int i = 0; i < cursor.getCount(); i++)
             {
                 cursor.moveToNext();
