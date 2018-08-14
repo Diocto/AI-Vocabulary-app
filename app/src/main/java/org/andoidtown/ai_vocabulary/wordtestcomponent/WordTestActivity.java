@@ -31,24 +31,41 @@ import java.util.Date;
 public class WordTestActivity extends AppCompatActivity {
     TextSwitcher wordSwitcher;
     TextView meaningTextView;
+    ImageView blind;
     ArrayList<String> wordList;
     ArrayList<String> meaningList;
-    ArrayList<Integer> wordNums;
-    ImageView blind;
+    AlphaAnimation alphaAnimation;
+    SQLiteDatabase database;
+    SimpleDateFormat dateFormat;
+    Animation slide_in_left, slide_out_right;
+    int nowWordIndex = 0;
+    ArrayList<Integer> groupWordNums;
+    ArrayList<String> groupNames;
+    int nowGroupIndex = 0;
     int correctNum = 0;
     int inCorrectNum = 0;
     int groupNum = 0;
-    int nowWordIndex = 0;
-    int nowGroupIndex = 0;
     int nowTotalWordIndex = 0;
     int totalWordNum = 0;
-    AlphaAnimation alphaAnimation;
-    SQLiteDatabase database;
-    Animation slide_in_left, slide_out_right;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_test);
+        initViews();
+        loadDBtoLocal();
+        if(groupNum != 0)
+        {
+            wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex)));
+            meaningTextView.setText(new StringBuffer(meaningList.get(nowTotalWordIndex)));
+        }
+        else
+        {
+            Toast.makeText(this,"ERROR:불러올 단어가 없습니다",Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private void initViews() {
         alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
         alphaAnimation.setDuration(100);
         meaningTextView = findViewById(R.id.text_wordtest_meaning);
@@ -68,59 +85,71 @@ public class WordTestActivity extends AppCompatActivity {
                 android.R.anim.slide_in_left);
         slide_out_right = AnimationUtils.loadAnimation(this,
                 android.R.anim.slide_out_right);
-        wordList = new ArrayList<>();
-        meaningList = new ArrayList<>();
-        wordNums = new ArrayList<>();
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String today = dateFormat.format(currentTime);
-        String[] values = {today};
-
         wordSwitcher.setInAnimation(slide_in_left);
         wordSwitcher.setOutAnimation(slide_out_right);
+    }
 
+    private void loadDBtoLocal() {
+        wordList = new ArrayList<>();
+        meaningList = new ArrayList<>();
+        groupWordNums = new ArrayList<>();
+        groupNames = new ArrayList<>();
+        Date currentTime = Calendar.getInstance().getTime();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = dateFormat.format(currentTime);
+        String[] values = {today};
         database = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
         Cursor groupCursor = database.rawQuery("select * from word_group where next_test_date = ?", values);
         groupNum = groupCursor.getCount();
         for (int i = 0 ; i < groupNum; i++)
         {
             groupCursor.moveToNext();
-            String[] group_name = {groupCursor.getString(i)};
+            String[] group_name = {groupCursor.getString(0)};
             Cursor wordCursor = database.rawQuery("select * from word where group_name = ?", group_name);
-            wordNums.add(wordCursor.getCount());
-            totalWordNum += wordNums.get(i);
-            for (int j = 0; j < wordNums.get(i); j++)
+            groupWordNums.add(wordCursor.getCount());
+            groupNames.add(groupCursor.getString(0));
+            totalWordNum += groupWordNums.get(i);
+            for (int j = 0; j < groupWordNums.get(i); j++)
             {
                 wordCursor.moveToNext();
                 wordList.add(wordCursor.getString(0));
                 meaningList.add(wordCursor.getString(1));
             }
         }
-        if(groupNum != 0)
-        {
-            wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex)));
-            meaningTextView.setText(new StringBuffer(meaningList.get(nowTotalWordIndex)));
-        }
-        else
-        {
-            Toast.makeText(this,"ERROR:불러올 단어가 없습니다",Toast.LENGTH_LONG).show();
-            finish();
-        }
     }
+
     public void showNextWord(){
         behindBlind();
         nowWordIndex++;
         nowTotalWordIndex++;
-        if(wordNums.get(nowGroupIndex) <= nowWordIndex)
+        if(groupWordNums.get(nowGroupIndex) <= nowWordIndex)
         {
-            nowGroupIndex++;
-            nowWordIndex = 0;
+            processExitGroupTest();
         }
         wordSwitcher.setText(wordList.get(nowTotalWordIndex));
         meaningTextView.setText(meaningList.get(nowTotalWordIndex));
-
     }
 
+    public void processExitGroupTest() {
+        String[] values = {groupNames.get(nowGroupIndex)};
+        Cursor groupCursor = database.rawQuery("select next_test_date from word_group where group_name = ?",values);
+        groupCursor.moveToNext();
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        String testDay =groupCursor.getString(0);
+        Date nextTestDate = new Date();
+        try {
+            nextTestDate= dateFormat1.parse(testDay);
+        } catch (Exception ex)
+        {
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nextTestDate);
+        calendar.add(Calendar.DATE,1);
+        nextTestDate = calendar.getTime();
+        database.execSQL("update word_group set next_test_date = " + nextTestDate +" where group_name = ?", values);
+        nowGroupIndex++;
+        nowWordIndex = 0;
+    }
 
     private void setButtonDelay(final View view, int milli) {
         view.setEnabled(false); // 클릭 무효화
@@ -146,7 +175,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
         if(isFinalWord())
         {
-            processExitTest();
+            processExitAllTest();
         }
         else
         {
@@ -167,15 +196,16 @@ public class WordTestActivity extends AppCompatActivity {
         }
         if(isFinalWord())
         {
-            processExitTest();
+            processExitAllTest();
         }
         else
         {
             showNextWord();
         }
     }
-    public void processExitTest() {
+    public void processExitAllTest() {
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+        alert_confirm.setCancelable(false);
         alert_confirm.setMessage("시험이 종료되었습니다! \n 확인 버튼을 누르면 결과로 넘어갑니다.");
         alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
@@ -186,14 +216,16 @@ public class WordTestActivity extends AppCompatActivity {
             }
         });
         AlertDialog alert = alert_confirm.create();
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
         alert.show();
 
     }
 
     public boolean isFinalWord()
     {
-        Toast.makeText(this,"inc, cor, total : " + inCorrectNum + ", " + correctNum + ", " + totalWordNum
-                ,Toast.LENGTH_LONG).show();
+  //      Toast.makeText(this,"inc, cor, total : " + inCorrectNum + ", " + correctNum + ", " + totalWordNum
+  //              ,Toast.LENGTH_LONG).show();
         if (inCorrectNum + correctNum == totalWordNum)
         {
             return true;
@@ -206,6 +238,27 @@ public class WordTestActivity extends AppCompatActivity {
     public void onClickBlind(View view){
         blind.startAnimation(alphaAnimation);
         blind.setVisibility(View.INVISIBLE);
+    }
+    public int getNextTestDay(int testNumber) {
+        switch (testNumber)
+        {
+            case 0:
+                return 1;
+            case 1:
+                return 1;
+            case 2:
+                return 1;
+            case 3:
+                return 3;
+            case 4:
+                return 4;
+            case 5:
+                return 8;
+            case 6:
+                return 15;
+            default:
+                return 0;
+        }
     }
     public void behindBlind(){
         blind.setVisibility(View.VISIBLE);
