@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     {
         try{
             db.execSQL("create table word_group (" +
-                    "group_name text," +
+                    "group_name text PRIMARY KEY," +
                     "registered_date datetime," +
                     "num_of_test integer," +
                     "next_test_date datetime)");

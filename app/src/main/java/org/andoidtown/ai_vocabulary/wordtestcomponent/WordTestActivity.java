@@ -99,22 +99,29 @@ public class WordTestActivity extends AppCompatActivity {
         String today = dateFormat.format(currentTime);
         String[] values = {today};
         database = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
-        Cursor groupCursor = database.rawQuery("select * from word_group where next_test_date = ?", values);
-        groupNum = groupCursor.getCount();
-        for (int i = 0 ; i < groupNum; i++)
+        Cursor groupCursor;
+        try
         {
-            groupCursor.moveToNext();
-            String[] group_name = {groupCursor.getString(0)};
-            Cursor wordCursor = database.rawQuery("select * from word where group_name = ?", group_name);
-            groupWordNums.add(wordCursor.getCount());
-            groupNames.add(groupCursor.getString(0));
-            totalWordNum += groupWordNums.get(i);
-            for (int j = 0; j < groupWordNums.get(i); j++)
+            groupCursor=database.rawQuery("select * from word_group where next_test_date = ?", values);
+            groupNum = groupCursor.getCount();
+            for (int i = 0 ; i < groupNum; i++)
             {
-                wordCursor.moveToNext();
-                wordList.add(wordCursor.getString(0));
-                meaningList.add(wordCursor.getString(1));
+                groupCursor.moveToNext();
+                String[] group_name = {groupCursor.getString(0)};
+                Cursor wordCursor = database.rawQuery("select * from word where group_name = ?", group_name);
+                groupWordNums.add(wordCursor.getCount());
+                groupNames.add(groupCursor.getString(0));
+                totalWordNum += groupWordNums.get(i);
+                for (int j = 0; j < groupWordNums.get(i); j++)
+                {
+                    wordCursor.moveToNext();
+                    wordList.add(wordCursor.getString(0));
+                    meaningList.add(wordCursor.getString(1));
+                }
             }
+        } catch (Exception ex)
+        {
+            Log.d("sql error", ex.toString());
         }
     }
 
@@ -132,21 +139,16 @@ public class WordTestActivity extends AppCompatActivity {
 
     public void processExitGroupTest() {
         String[] values = {groupNames.get(nowGroupIndex)};
-        Cursor groupCursor = database.rawQuery("select next_test_date from word_group where group_name = ?",values);
+        Cursor groupCursor = database.rawQuery("select * from word_group where group_name = ?",values);
+        Cursor testCursor = database.rawQuery("select * from word_test where group_name = ?",values);
+        Integer testNumber = testCursor.getCount();
+        Integer addNumber = getNextTestDay(testNumber);
         groupCursor.moveToNext();
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        String testDay =groupCursor.getString(0);
-        Date nextTestDate = new Date();
-        try {
-            nextTestDate= dateFormat1.parse(testDay);
-        } catch (Exception ex)
-        {
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nextTestDate);
-        calendar.add(Calendar.DATE,1);
-        nextTestDate = calendar.getTime();
-        database.execSQL("update word_group set next_test_date = " + nextTestDate +" where group_name = ?", values);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 1);
+        String nextTestDate = dateFormat.format(cal.getTime());
+        database.execSQL("update word_group set next_test_date = '" + nextTestDate + "' where group_name = ?", values);
         nowGroupIndex++;
         nowWordIndex = 0;
     }
@@ -175,6 +177,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
         if(isFinalWord())
         {
+            processExitGroupTest();
             processExitAllTest();
         }
         else
@@ -196,6 +199,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
         if(isFinalWord())
         {
+            processExitGroupTest();
             processExitAllTest();
         }
         else
