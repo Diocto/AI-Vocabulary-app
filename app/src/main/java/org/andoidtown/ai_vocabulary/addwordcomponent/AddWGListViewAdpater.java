@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 
 import org.andoidtown.ai_vocabulary.R;
 
@@ -50,6 +51,8 @@ public class AddWGListViewAdpater extends BaseAdapter {
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.word_add_listview_item,parent,false);
+            ((EditText) view.findViewById(R.id.add_word_editText)).setPrivateImeOptions("defaultInputmode=english;");
+            ((EditText) view.findViewById(R.id.add_meaning_editText)).setPrivateImeOptions("defaultInputmode=korean;");
             editList.add(view);
         }
         return view;
