@@ -20,7 +20,8 @@
         <activity android:name=".addwordcomponent.AddWordGruopActivity" />
         <activity android:name=".wordlistviewcomponent.WordListActivity" />
         <activity android:name=".wordtestcomponent.WordTestActivity" />
-        <activity android:name=".wordtestcomponent.IncorrectWordListActivity"></activity>
+        <activity android:name=".wordtestcomponent.IncorrectWordListActivity" />
+
     </application>
 
 </manifest>
