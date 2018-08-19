@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,15 +16,15 @@ import org.andoidtown.ai_vocabulary.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddWordGruopActivity extends AppCompatActivity {
     Button cancelButton;
     Button addWGButton;
+    EditText wgName;
     AddWGListViewAdpater adapter;
     ListView listview;
     ArrayList<AddWGListViewItem> itemList = new ArrayList<>();
-
-    public static int addNum = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
         listview = findViewById(R.id.addWordListView);
         adapter = new AddWGListViewAdpater(this,itemList);
         listview.setAdapter(adapter);
-
+        wgName = findViewById(R.id.edit_addwg_wgname);
         cancelButton = findViewById(R.id.cancelAddButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,13 +41,21 @@ public class AddWordGruopActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("in","onItemClick");
+                EditText item = view.findViewById(R.id.add_meaning_editText);
+                if(item == null)
+                    Log.d("nullerror","view is null");
+                onclickedOnce(item);
+            }
+        });
         addWGButton = findViewById(R.id.addWGToDBButton);
+        adapter.addEditText();
 
-        for(int i = 0; i < 10 ;i ++)
-        {
-            adapter.addEditText();
-        }
+
+
     }
     public void onclickedOnce(View view){
         Log.i("addLod","once Clicked!!!!!!");
@@ -64,6 +73,14 @@ public class AddWordGruopActivity extends AppCompatActivity {
             return;
         }
 
+        String groupName = wgName.getText().toString();
+        if(groupName.equals("")) {
+
+            Date currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            groupName = dateFormat.format(currentTime);
+        }
+
         for (int i = 0; i < adapter.getCount(); i++)
         {
             View editTextItem = adapter.getEditText(i);
@@ -72,9 +89,11 @@ public class AddWordGruopActivity extends AppCompatActivity {
             String word = wordEditText.getText().toString();
             String meaning = meaningEditText.getText().toString();
 
-            insertWordToSQL(db, word, meaning,Integer.toString(addNum));
+            insertWordToSQL(db, word, meaning,groupName);
         }
-        insertWGToDB(Integer.toString(addNum), db);
+
+
+        insertWGToDB(groupName, db);
 
         finish();
         return;
@@ -85,7 +104,8 @@ public class AddWordGruopActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         String today = dateFormat.format(cal.getTime());
         String testDay = dateFormat.format(cal.getTime());
-        String values[] = {Integer.toString(addNum++), today,testDay};
+
+        String values[] = {groupName, today,testDay};
         try{
             db.execSQL("insert into word_group(group_name, registered_date, next_test_date)" +
                     "values(?, ?, ?)",values);

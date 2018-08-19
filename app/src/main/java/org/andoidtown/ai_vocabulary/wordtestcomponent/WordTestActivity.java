@@ -22,6 +22,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.WordParceble;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,15 +33,15 @@ public class WordTestActivity extends AppCompatActivity {
     TextSwitcher wordSwitcher;
     TextView meaningTextView;
     ImageView blind;
-    ArrayList<String> wordList;
-    ArrayList<String> meaningList;
+    ArrayList<WordParceble> wordList;
+    ArrayList<WordParceble> incorrectWordList;
+    ArrayList<Integer> groupWordNums;
+    ArrayList<String> groupNames;
     AlphaAnimation alphaAnimation;
     SQLiteDatabase database;
     SimpleDateFormat dateFormat;
     Animation slide_in_left, slide_out_right;
     int nowWordIndex = 0;
-    ArrayList<Integer> groupWordNums;
-    ArrayList<String> groupNames;
     int nowGroupIndex = 0;
     int correctNum = 0;
     int inCorrectNum = 0;
@@ -55,14 +56,15 @@ public class WordTestActivity extends AppCompatActivity {
         loadDBtoLocal();
         if(groupNum != 0)
         {
-            wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex)));
-            meaningTextView.setText(new StringBuffer(meaningList.get(nowTotalWordIndex)));
+            wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getWord()));
+            meaningTextView.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getMeaning()));
         }
         else
         {
             Toast.makeText(this,"ERROR:불러올 단어가 없습니다",Toast.LENGTH_LONG).show();
             finish();
         }
+        incorrectWordList = new ArrayList<>();
     }
 
     private void initViews() {
@@ -91,7 +93,6 @@ public class WordTestActivity extends AppCompatActivity {
 
     private void loadDBtoLocal() {
         wordList = new ArrayList<>();
-        meaningList = new ArrayList<>();
         groupWordNums = new ArrayList<>();
         groupNames = new ArrayList<>();
         Date currentTime = Calendar.getInstance().getTime();
@@ -115,8 +116,7 @@ public class WordTestActivity extends AppCompatActivity {
                 for (int j = 0; j < groupWordNums.get(i); j++)
                 {
                     wordCursor.moveToNext();
-                    wordList.add(wordCursor.getString(0));
-                    meaningList.add(wordCursor.getString(1));
+                    wordList.add(new WordParceble(wordCursor.getString(0), wordCursor.getString(1)));
                 }
             }
         } catch (Exception ex)
@@ -133,8 +133,8 @@ public class WordTestActivity extends AppCompatActivity {
         {
             processExitGroupTest();
         }
-        wordSwitcher.setText(wordList.get(nowTotalWordIndex));
-        meaningTextView.setText(meaningList.get(nowTotalWordIndex));
+        wordSwitcher.setText(wordList.get(nowTotalWordIndex).getWord());
+        meaningTextView.setText(wordList.get(nowTotalWordIndex).getMeaning());
     }
 
     public void processExitGroupTest() {
@@ -146,7 +146,7 @@ public class WordTestActivity extends AppCompatActivity {
         groupCursor.moveToNext();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 1);
+        cal.add(Calendar.DATE, addNumber);
         String nextTestDate = dateFormat.format(cal.getTime());
         database.execSQL("update word_group set next_test_date = '" + nextTestDate + "' where group_name = ?", values);
         nowGroupIndex++;
@@ -166,7 +166,7 @@ public class WordTestActivity extends AppCompatActivity {
     public void onClickYes(final View view){
         setButtonDelay(view, 100);
         correctNum++;
-        String nowWord = wordList.get(nowTotalWordIndex);
+        String nowWord = wordList.get(nowTotalWordIndex).getWord();
         String[] values = {nowWord};
         try
         {
@@ -188,8 +188,10 @@ public class WordTestActivity extends AppCompatActivity {
     public void onClickNo(final View view){
         setButtonDelay(view, 100);
         inCorrectNum++;
-        String nowWord = wordList.get(nowTotalWordIndex);
+        String nowWord = wordList.get(nowTotalWordIndex).getWord();
+        String nowMeaning = wordList.get(nowTotalWordIndex).getMeaning();
         String[] values = {nowWord};
+        incorrectWordList.add(new WordParceble(nowWord, nowMeaning));
         try
         {
             database.execSQL("update word set incorrect_answer_num = incorrect_answer_num + 1 where value = ?",values);
@@ -214,7 +216,10 @@ public class WordTestActivity extends AppCompatActivity {
         alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("incorrectList",incorrectWordList);
                 Intent intent = new Intent(WordTestActivity.this, IncorrectWordListActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
             }

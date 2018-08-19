@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-;
+
     View.OnClickListener movePageListener = new View.OnClickListener()
     {
         @Override

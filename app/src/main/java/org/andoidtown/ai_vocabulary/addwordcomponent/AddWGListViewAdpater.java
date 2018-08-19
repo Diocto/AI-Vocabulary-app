@@ -45,18 +45,16 @@ public class AddWGListViewAdpater extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup parent) {
         final int pos = i;
         final Context context = parent.getContext();
-
-        if (convertView == null)
+        View view = convertView;
+        if (view == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.word_add_listview_item,parent,false);
-            editList.add(convertView);
+            view = inflater.inflate(R.layout.word_add_listview_item,parent,false);
+            editList.add(view);
         }
-
-
-        return convertView;
+        return view;
     }
-    public  void addBottomEditText(View view){
+    public void addBottomEditText(View view){
         if(view == null)
         {
             Log.d("user","view is null");
