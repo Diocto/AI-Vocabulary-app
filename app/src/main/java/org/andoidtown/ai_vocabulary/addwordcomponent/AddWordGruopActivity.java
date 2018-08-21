@@ -24,11 +24,23 @@ public class AddWordGruopActivity extends AppCompatActivity {
     EditText wgName;
     AddWGListViewAdpater adapter;
     ListView listview;
+    Integer numOfEditText = 1;
     ArrayList<AddWGListViewItem> itemList = new ArrayList<>();
+    public void notifyListViewDataChanged()
+    {
+        for (int i = 0; i < numOfEditText; i++)
+        {
+            adapter.addEditText();
+        }
+        adapter.notifyDataSetChanged();
+        Toast.makeText(this,"데이터 갱신됨",Toast.LENGTH_LONG);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word_gruop);
+        SeekbarDialog seekbarDialog = new SeekbarDialog(this);
+        seekbarDialog.show();
 
         listview = findViewById(R.id.addWordListView);
         adapter = new AddWGListViewAdpater(this,itemList);
@@ -52,10 +64,11 @@ public class AddWordGruopActivity extends AppCompatActivity {
             }
         });
         addWGButton = findViewById(R.id.addWGToDBButton);
-        adapter.addEditText();
-
-
-
+        
+    }
+    public void setEditTextNum(Integer i)
+    {
+        this.numOfEditText = i;
     }
     public void onclickedOnce(View view){
         Log.i("addLod","once Clicked!!!!!!");
