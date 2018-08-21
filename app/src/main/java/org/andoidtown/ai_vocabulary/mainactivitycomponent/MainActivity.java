@@ -142,4 +142,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    public SQLiteDatabase getDB()
+    {
+        return this.db;
+    }
 }

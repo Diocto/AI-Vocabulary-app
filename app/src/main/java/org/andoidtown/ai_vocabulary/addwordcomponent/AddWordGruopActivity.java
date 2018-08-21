@@ -64,7 +64,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
             }
         });
         addWGButton = findViewById(R.id.addWGToDBButton);
-        
+
     }
     public void setEditTextNum(Integer i)
     {
