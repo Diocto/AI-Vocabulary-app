@@ -28,8 +28,10 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_margin="40dp"
-                android:background="@mipmap/ic_launcher_round"
-                android:text="x월 x일자 테스트\n\n외울 단어수 : xx\n\n시험 시작하기" />
+                android:background="@color/colorPrimary"
+                android:text="x월 x일자 테스트\n\n외울 단어수 : xx\n\n시험 시작하기"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,28 +46,28 @@
                     >
 
                     <TextView
-                        android:id="@+id/registeredWordsNumTextView"
+                        android:id="@+id/text_wordtestf_wordnumtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="등록된 단어 수" />
 
                     <TextView
-                        android:id="@+id/memorizedWordsNumTextView"
+                        android:id="@+id/text_wordtestf_memwordtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="외운 단어 수" />
 
                     <TextView
-                        android:id="@+id/notMemorizedWordsNumTextView"
+                        android:id="@+id/text_wordtestf_notmemwordtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="못 외운 단어 수" />
 
                     <TextView
-                        android:id="@+id/registeredWordsNumTextView2"
+                        android:id="@+id/text_wordtestf_perfectwordtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -81,28 +83,28 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/registeredWordsNumTextView5"
+                        android:id="@+id/text_wordtestf_wordnum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="0" />
 
                     <TextView
-                        android:id="@+id/registeredWordsNumTextView6"
+                        android:id="@+id/text_wordtestf_memwordnum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="0" />
 
                     <TextView
-                        android:id="@+id/registeredWordsNumTextView7"
+                        android:id="@+id/text_wordtestf_notmemwordnum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="0" />
 
                     <TextView
-                        android:id="@+id/memorizedWordsNumTextView2"
+                        android:id="@+id/text_wordtestf_perfectwordnum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
