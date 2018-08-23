@@ -78,6 +78,7 @@ public class WordTestFragment extends Fragment {
         else
         {
             textOfButton = "오늘 볼 시험이 없습니다";
+            testWordButton.setBackgroundColor(R.color.colorPrimaryDark);
             testWordButton.setText(textOfButton);
         }
 
