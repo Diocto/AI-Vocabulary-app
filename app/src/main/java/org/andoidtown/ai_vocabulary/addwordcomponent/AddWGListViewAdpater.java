@@ -1,7 +1,6 @@
 package org.andoidtown.ai_vocabulary.addwordcomponent;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,28 +12,23 @@ import org.andoidtown.ai_vocabulary.R;
 import java.util.ArrayList;
 
 public class AddWGListViewAdpater extends BaseAdapter {
-    private ArrayList<AddWGListViewItem> listView ;
-    private ArrayList<View> editList = new ArrayList<>();
+    private ArrayList<AddWGListViewItem> myItemList;
     private Context context;
     final static int IS_CLICKED_ONCE = 0;
     final static int IS_NOT_CLICKED = 1;
     public AddWGListViewAdpater(Context context, ArrayList<AddWGListViewItem> listView) {
-        this.listView = listView;
+        this.myItemList = listView;
         this.context = context;
-    }
-    public View getEditText(int index)
-    {
-        return editList.get(index);
     }
 
     @Override
     public int getCount() {
-        return listView.size();
+        return myItemList.size();
     }
 
     @Override
     public AddWGListViewItem getItem(int i) {
-        return listView.get(i);
+        return myItemList.get(i);
     }
 
     @Override
@@ -47,36 +41,55 @@ public class AddWGListViewAdpater extends BaseAdapter {
         final int pos = i;
         final Context context = parent.getContext();
         View view = convertView;
+        ViewHolder viewHolder;
         if (view == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.word_add_listview_item,parent,false);
-            ((EditText) view.findViewById(R.id.add_word_editText)).setPrivateImeOptions("defaultInputmode=english;");
-            ((EditText) view.findViewById(R.id.add_meaning_editText)).setPrivateImeOptions("defaultInputmode=korean;");
-            editList.add(view);
-        }
-        return view;
-    }
-    public void addBottomEditText(View view){
-        if(view == null)
-        {
-            Log.d("user","view is null");
-            return;
+            viewHolder = new ViewHolder();
+            viewHolder.word = (EditText) view.findViewById(R.id.add_word_editText);
+            viewHolder.meaning = (EditText) view.findViewById(R.id.add_meaning_editText);
+            viewHolder.word.setPrivateImeOptions("defaultInputmode=english;");
+            viewHolder.meaning.setPrivateImeOptions("defaultInputmode=korean;");
+            view.setTag(viewHolder);
         }
         else
         {
-            Log.d("user",view.toString());
+            viewHolder = (ViewHolder) view.getTag();
         }
-        if(view.getTag() == null) {
-            Log.d("user","view tag is null");
-            view.setTag(IS_CLICKED_ONCE);
-            addEditText();
-            notifyDataSetChanged();
-        }
+        viewHolder.word.setText(myItemList.get(i).word);
+        viewHolder.meaning.setText(myItemList.get(i).wordsMeaning);
+        viewHolder.word.setId(pos);
+        viewHolder.meaning.setId(pos);
+        viewHolder.word.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    final int position = v.getId();
+                    final EditText wordEdit = (EditText) v;
+                    myItemList.get(position).word = wordEdit.getText().toString();
+                }
+            }
+        });
+        viewHolder.meaning.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    final int position = v.getId();
+                    final EditText meaningEdit = (EditText) v;
+                    myItemList.get(position).wordsMeaning = meaningEdit.getText().toString();
+                }
+            }
+        });
+        return view;
     }
-    public void addEditText()
+    public void addNewItem()
     {
         AddWGListViewItem newItem = new AddWGListViewItem();
-        listView.add(newItem);
+        myItemList.add(newItem);
+    }
+    static class ViewHolder {
+        EditText word;
+        EditText meaning;
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,7 +29,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
     {
         for (int i = 0; i < numOfEditText; i++)
         {
-            adapter.addEditText();
+            adapter.addNewItem();
         }
         adapter.notifyDataSetChanged();
         Toast.makeText(this,"데이터 갱신됨",Toast.LENGTH_LONG);
@@ -53,26 +52,11 @@ public class AddWordGruopActivity extends AppCompatActivity {
                 finish();
             }
         });
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("in","onItemClick");
-                EditText item = view.findViewById(R.id.add_meaning_editText);
-                if(item == null)
-                    Log.d("nullerror","view is null");
-                onclickedOnce(item);
-            }
-        });
         addWGButton = findViewById(R.id.addWGToDBButton);
-
     }
     public void setEditTextNum(Integer i)
     {
         this.numOfEditText = i;
-    }
-    public void onclickedOnce(View view){
-        Log.i("addLod","once Clicked!!!!!!");
-        adapter.addBottomEditText(view);
     }
 
     public void onClickAddWGButton(View view)
@@ -96,11 +80,8 @@ public class AddWordGruopActivity extends AppCompatActivity {
 
         for (int i = 0; i < adapter.getCount(); i++)
         {
-            View editTextItem = adapter.getEditText(i);
-            EditText wordEditText = editTextItem.findViewById(R.id.add_word_editText);
-            EditText meaningEditText = editTextItem.findViewById(R.id.add_meaning_editText);
-            String word = wordEditText.getText().toString();
-            String meaning = meaningEditText.getText().toString();
+            String word = adapter.getItem(i).word;
+            String meaning = adapter.getItem(i).wordsMeaning;
 
             insertWordToSQL(db, word, meaning,groupName);
         }
