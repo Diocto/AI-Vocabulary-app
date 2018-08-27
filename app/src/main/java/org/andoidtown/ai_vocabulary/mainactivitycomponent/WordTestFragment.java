@@ -61,7 +61,7 @@ public class WordTestFragment extends Fragment {
         setButtonText();
         return rootView;
     }
-    private void setButtonText() {
+    public void setButtonText() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
         String values[] = {dataFormat.format(calendar.getTime())};
@@ -83,7 +83,7 @@ public class WordTestFragment extends Fragment {
         }
 
     }
-    private void setStatusMyProgress() {
+    public void setStatusMyProgress() {
         Cursor cursor = db.rawQuery("select count(*) from word",null);
         cursor.moveToNext();
         numOfRegisteredWord.setText(cursor.getString(0));

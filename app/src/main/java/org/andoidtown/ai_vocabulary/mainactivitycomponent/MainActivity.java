@@ -11,8 +11,11 @@ import android.widget.Button;
 
 import org.andoidtown.ai_vocabulary.R;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     ViewPager mainVP;
+    ArrayList<Button> pagerButtonList;
     Button graphTapButton;
     Button testTapButton;
     Button managementTapButton;
@@ -28,7 +31,29 @@ public class MainActivity extends AppCompatActivity {
         testTapButton = findViewById(R.id.wordTestTapButton);
         managementTapButton = findViewById(R.id.managementWordsTapButton);
 
+        pagerButtonList = new ArrayList<>();
+        pagerButtonList.add(graphTapButton);
+        pagerButtonList.add(testTapButton);
+        pagerButtonList.add(managementTapButton);
+
         mainVP.setAdapter(new pagerAdapter(getSupportFragmentManager()));
+        mainVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                setButtonNotSelected(pagerButtonList.get(i));
+                setButtonSelected(pagerButtonList.get(i));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         mainVP.setCurrentItem(1);
 
         graphTapButton.setOnClickListener(movePageListener);
@@ -38,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         managementTapButton.setOnClickListener(movePageListener);
         managementTapButton.setTag(2);
 
+        for(int i = 0; i < pagerButtonList.size(); i++)
+        {
+            pagerButtonList.get(i).setTextColor(getResources().getColor(R.color.colorWhite));
+        }
         databaseName = "vocabularyDataBase";
         if ( createDatabase(databaseName) ) {
             createWordTable();
@@ -104,14 +133,27 @@ public class MainActivity extends AppCompatActivity {
             Log.d("exception", ex.toString());
         }
     }
-
-
+    public void setButtonNotSelected(Button view)
+    {
+        for(int i = 0; i < pagerButtonList.size(); i++)
+        {
+            if(pagerButtonList.get(i) != view)
+            {
+                pagerButtonList.get(i).setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        }
+    }
+    public void setButtonSelected(Button view)
+    {
+        view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
     View.OnClickListener movePageListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
         {
             int tag = (int) v.getTag();
+
             mainVP.setCurrentItem(tag);
         }
     };
