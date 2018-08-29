@@ -78,7 +78,7 @@ public class WordTestFragment extends Fragment {
         else
         {
             textOfButton = "오늘 볼 시험이 없습니다";
-            testWordButton.setBackgroundColor(R.color.colorPrimaryDark);
+            testWordButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             testWordButton.setText(textOfButton);
         }
 
@@ -87,6 +87,8 @@ public class WordTestFragment extends Fragment {
         Cursor cursor = db.rawQuery("select count(*) from word",null);
         cursor.moveToNext();
         numOfRegisteredWord.setText(cursor.getString(0));
+
+
         cursor = db.rawQuery("select count(*) from word where correct_answer_num > incorrect_answer_num",null);
         cursor.moveToNext();
         numOfMemorizedWord.setText(cursor.getString(0));
