@@ -9,18 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mainactivitycomponent.MainActivity">
+        <activity android:name=".mainactivity_component.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".wordlistviewcomponent.WordGroupListViewActivity" />
-        <activity android:name=".addwordcomponent.AddWordGruopActivity" />
-        <activity android:name=".wordlistviewcomponent.WordListActivity" />
-        <activity android:name=".wordtestcomponent.WordTestActivity" />
-        <activity android:name=".wordtestcomponent.IncorrectWordListActivity" />
+        <activity android:name=".word_listview_component.WordGroupListViewActivity" />
+        <activity android:name=".add_word_component.AddWordGruopActivity" />
+        <activity android:name=".word_listview_component.WordListActivity" />
+        <activity android:name=".wordtest_component.WordTestActivity" />
+        <activity android:name=".wordtest_component.IncorrectWordListActivity" />
 
     </application>
 

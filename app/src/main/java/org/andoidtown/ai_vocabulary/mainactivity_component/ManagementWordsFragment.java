@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.mainactivitycomponent;
+package org.andoidtown.ai_vocabulary.mainactivity_component;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.andoidtown.ai_vocabulary.R;
-import org.andoidtown.ai_vocabulary.addwordcomponent.AddWordGruopActivity;
-import org.andoidtown.ai_vocabulary.wordlistviewcomponent.WordGroupListViewActivity;
+import org.andoidtown.ai_vocabulary.add_word_component.AddWordGruopActivity;
+import org.andoidtown.ai_vocabulary.word_listview_component.WordGroupListViewActivity;
 
 
 /**

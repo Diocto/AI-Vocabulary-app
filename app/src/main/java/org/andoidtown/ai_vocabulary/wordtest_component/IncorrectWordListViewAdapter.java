@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.wordtestcomponent;
+package org.andoidtown.ai_vocabulary.wordtest_component;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.wordlistviewcomponent;
+package org.andoidtown.ai_vocabulary.word_listview_component;
 
 import android.content.Context;
 import android.view.LayoutInflater;

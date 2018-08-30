@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.addwordcomponent;
+package org.andoidtown.ai_vocabulary.add_word_component;
 
 import android.app.Dialog;
 import android.content.Context;

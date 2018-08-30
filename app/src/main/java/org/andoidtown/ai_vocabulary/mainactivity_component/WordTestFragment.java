@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.mainactivitycomponent;
+package org.andoidtown.ai_vocabulary.mainactivity_component;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.andoidtown.ai_vocabulary.R;
-import org.andoidtown.ai_vocabulary.wordtestcomponent.WordTestActivity;
+import org.andoidtown.ai_vocabulary.wordtest_component.WordTestActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

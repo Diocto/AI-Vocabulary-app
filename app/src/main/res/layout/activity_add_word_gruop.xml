@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addwordcomponent.AddWordGruopActivity">
+    tools:context=".add_word_component.AddWordGruopActivity">
 
     <LinearLayout
         android:layout_width="0dp"

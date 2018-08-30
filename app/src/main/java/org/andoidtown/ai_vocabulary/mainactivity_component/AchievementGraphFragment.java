@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.mainactivitycomponent;
+package org.andoidtown.ai_vocabulary.mainactivity_component;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

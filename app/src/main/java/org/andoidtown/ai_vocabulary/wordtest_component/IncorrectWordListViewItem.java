@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.wordtestcomponent;
+package org.andoidtown.ai_vocabulary.wordtest_component;
 
 public class IncorrectWordListViewItem {
     private String word;

@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.addwordcomponent;
+package org.andoidtown.ai_vocabulary.add_word_component;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;

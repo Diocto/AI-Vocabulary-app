@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".wordlistviewcomponent.WordGroupListViewActivity">
+    tools:context=".word_listview_component.WordGroupListViewActivity">
 
     <LinearLayout
         android:layout_width="0dp"

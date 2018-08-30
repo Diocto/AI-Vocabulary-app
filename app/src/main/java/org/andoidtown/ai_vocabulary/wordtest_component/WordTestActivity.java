@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.wordtestcomponent;
+package org.andoidtown.ai_vocabulary.wordtest_component;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,7 +69,7 @@ public class WordTestActivity extends AppCompatActivity {
 
     private void initViews() {
         alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation.setDuration(100);
+        alphaAnimation.setDuration(200);
         meaningTextView = findViewById(R.id.text_wordtest_meaning);
         wordSwitcher = (TextSwitcher) findViewById(R.id.switcher_wordtest_word);
         wordSwitcher.setFactory(new ViewSwitcher.ViewFactory() {

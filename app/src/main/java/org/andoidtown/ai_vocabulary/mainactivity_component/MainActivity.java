@@ -1,4 +1,4 @@
-package org.andoidtown.ai_vocabulary.mainactivitycomponent;
+package org.andoidtown.ai_vocabulary.mainactivity_component;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int i) {
                 setButtonNotSelected(pagerButtonList.get(i));
                 setButtonSelected(pagerButtonList.get(i));
+                if (i == 1)
+                {
+
+                }
             }
 
             @Override
@@ -126,6 +130,20 @@ public class MainActivity extends AppCompatActivity {
                     "incorrect_answer_num integer," +
                     "test_time datetime," +
                     "group_name text" +
+                    ")");
+        }
+        catch (Exception ex)
+        {
+            Log.d("exception", ex.toString());
+        }
+    }
+    private void createIncorrectWordList()
+    {
+        try{
+            db.execSQL("create table incorrect_word (" +
+                    "incorrect_word text, " +
+                    "incorrect_word_meaning text, " +
+                    "incorrect_word_group_name text" +
                     ")");
         }
         catch (Exception ex)
