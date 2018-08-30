@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_wordtest_groupname"
+            android:id="@+id/text_wordtest_remainWGnum"
             android:layout_width="match_parent"
             android:layout_height="22dp"
             android:layout_gravity="center"
@@ -86,15 +86,15 @@
 
             <ImageView
                 android:id="@+id/image_wordtest_blind"
-                android:onClick="onClickBlind"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="onClickBlind"
                 app:srcCompat="@android:color/background_dark" />
 
         </FrameLayout>
 
         <TextView
-            android:id="@+id/text_wordtest_remainingword"
+            android:id="@+id/text_wordtest_remainword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

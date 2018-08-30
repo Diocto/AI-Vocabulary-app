@@ -32,22 +32,24 @@ import java.util.Date;
 public class WordTestActivity extends AppCompatActivity {
     TextSwitcher wordSwitcher;
     TextView meaningTextView;
+    TextView remainWordTextView;
+    TextView remainGroupTextView;
     ImageView blind;
-    ArrayList<WordParceble> wordList;
+    ArrayList<WordParceble> wordList;;
+    int nowWordIndex = 0;
+    int nowTotalWordIndex = 0;
+    int totalWordNum = 0;
     ArrayList<WordParceble> incorrectWordList;
+    int correctNum = 0;
+    int inCorrectNum = 0;
     ArrayList<Integer> groupWordNums;
     ArrayList<String> groupNames;
+    int nowGroupIndex = 0;
+    int groupNum = 0;
     AlphaAnimation alphaAnimation;
     SQLiteDatabase database;
     SimpleDateFormat dateFormat;
     Animation slide_in_left, slide_out_right;
-    int nowWordIndex = 0;
-    int nowGroupIndex = 0;
-    int correctNum = 0;
-    int inCorrectNum = 0;
-    int groupNum = 0;
-    int nowTotalWordIndex = 0;
-    int totalWordNum = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +67,15 @@ public class WordTestActivity extends AppCompatActivity {
             finish();
         }
         incorrectWordList = new ArrayList<>();
+        setTextState();
     }
 
     private void initViews() {
         alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
         alphaAnimation.setDuration(200);
         meaningTextView = findViewById(R.id.text_wordtest_meaning);
+        remainGroupTextView = findViewById(R.id.text_wordtest_remainWGnum);
+        remainWordTextView = findViewById(R.id.text_wordtest_remainword);
         wordSwitcher = (TextSwitcher) findViewById(R.id.switcher_wordtest_word);
         wordSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -135,6 +140,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
         wordSwitcher.setText(wordList.get(nowTotalWordIndex).getWord());
         meaningTextView.setText(wordList.get(nowTotalWordIndex).getMeaning());
+        setTextState();
     }
 
     public void processExitGroupTest() {
@@ -230,7 +236,15 @@ public class WordTestActivity extends AppCompatActivity {
         alert.show();
 
     }
+    public void setTextState()
+    {
+        String remainGruop = (nowGroupIndex + 1) + "/" + groupWordNums.size();
+        String remainWord = (nowWordIndex + 1) + "/" + groupWordNums.get(nowGroupIndex);
 
+        remainGroupTextView.setText(remainGruop);
+        remainWordTextView.setText(remainWord);
+
+    }
     public boolean isFinalWord()
     {
   //      Toast.makeText(this,"inc, cor, total : " + inCorrectNum + ", " + correctNum + ", " + totalWordNum
