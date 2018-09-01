@@ -2,7 +2,9 @@ package org.andoidtown.ai_vocabulary.mainactivity_component;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,12 +17,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager mainVP;
+    PagerAdapter pagerAdapter;
     ArrayList<Button> pagerButtonList;
     Button graphTapButton;
     Button testTapButton;
     Button managementTapButton;
     SQLiteDatabase db;
-    String databaseName;
+    Fragment achievementFragment;
+    Fragment wordTestFragment;
+    Fragment managementWordFragment;
+    static String databaseName = "vocabularyDataBase";
+    boolean isFirst = true;
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        pagerAdapter.notifyDataSetChanged();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,22 +48,23 @@ public class MainActivity extends AppCompatActivity {
         pagerButtonList.add(graphTapButton);
         pagerButtonList.add(testTapButton);
         pagerButtonList.add(managementTapButton);
-
-        mainVP.setAdapter(new pagerAdapter(getSupportFragmentManager()));
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mainVP.setAdapter(pagerAdapter);
         mainVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-
+                if (i == 1)
+                {
+                    ((WordTestFragment)wordTestFragment).setButtonText();
+                    ((WordTestFragment)wordTestFragment).setStatusMyProgress();
+                }
             }
 
             @Override
             public void onPageSelected(int i) {
                 setButtonNotSelected(pagerButtonList.get(i));
                 setButtonSelected(pagerButtonList.get(i));
-                if (i == 1)
-                {
 
-                }
             }
 
             @Override
@@ -176,23 +190,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private class pagerAdapter extends FragmentStatePagerAdapter {
-        public pagerAdapter(android.support.v4.app.FragmentManager  fm)
+    private class PagerAdapter extends FragmentStatePagerAdapter {
+        public PagerAdapter(android.support.v4.app.FragmentManager  fm)
         {
             super(fm);
         }
         @Override
         public android.support.v4.app.Fragment getItem(int position)
         {
+            Log.d("메시지", "getItem in pagetAdapter 호출됨");
             switch (position) {
                 case 0:
-                    return new AchievementGraphFragment();
+                    achievementFragment = new AchievementGraphFragment();
+                    return achievementFragment;
                 case 1:
-                    return new WordTestFragment();
+                    wordTestFragment = new WordTestFragment();
+                    return wordTestFragment;
                 case 2:
-                    return new ManagementWordsFragment();
+                    managementWordFragment = new ManagementWordsFragment();
+                    return managementWordFragment;
                 default:
-                    return new WordTestFragment();
+                    wordTestFragment = new WordTestFragment();
+                    return wordTestFragment;
             }
         }
         @Override
