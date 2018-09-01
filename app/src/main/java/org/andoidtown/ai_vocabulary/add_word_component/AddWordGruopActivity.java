@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
     {
         SQLiteDatabase db;
         try{
-            db = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
+            db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         } catch(Exception ex)
         {
             ex.printStackTrace();

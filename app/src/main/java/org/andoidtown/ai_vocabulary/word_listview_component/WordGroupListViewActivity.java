@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
 public class WordGroupListViewActivity extends AppCompatActivity {
     WordGroupListViewAdapter adapter;
@@ -40,7 +41,7 @@ public class WordGroupListViewActivity extends AppCompatActivity {
 
     public void showWordList()
     {
-        SQLiteDatabase db = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
+        SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         String aSQL = "select * from word_group";
         try {
             Cursor cursor = db.rawQuery(aSQL, null);

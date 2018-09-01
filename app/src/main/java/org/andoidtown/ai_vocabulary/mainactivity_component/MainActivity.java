@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment achievementFragment;
     Fragment wordTestFragment;
     Fragment managementWordFragment;
-    static String databaseName = "vocabularyDataBase";
+    public static final String databaseName = "vocabularyDataBase";
     boolean isFirst = true;
     @Override
     protected void onResume()
@@ -85,11 +85,11 @@ public class MainActivity extends AppCompatActivity {
         {
             pagerButtonList.get(i).setTextColor(getResources().getColor(R.color.colorWhite));
         }
-        databaseName = "vocabularyDataBase";
         if ( createDatabase(databaseName) ) {
             createWordTable();
             createWordGroupTable();
             createWordTestTable();
+            createIncorrectWordList();
         }
     }
     private boolean createDatabase(String databaseName) {

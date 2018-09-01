@@ -30,7 +30,7 @@ public class WordListActivity extends AppCompatActivity {
         groupName = parentIntent.getStringExtra("groupName");
         groupNameTextView = findViewById(R.id.groupNameTextView);
         groupNameTextView.setText(groupName);
-        SQLiteDatabase db = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
+        SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         String values[] = {groupName};
         Cursor cursor = db.rawQuery("select * from word where group_name = ?",values);
         Log.d("cursorNum",Integer.toString(cursor.getCount()));

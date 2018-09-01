@@ -41,14 +41,14 @@ public class IncorrectWordListActivity extends AppCompatActivity {
         incorrectListView = findViewById(R.id.listview_inwordlist_inwordlist);
         adapter = new IncorrectWordListViewAdapter();
         incorrectListView.setAdapter(adapter);
-      /*  incorrectWordList = getIntent().getExtras().getParcelableArrayList("incorrectList");
+        incorrectWordList = getIntent().getExtras().getParcelableArrayList("incorrectList");
 
         for (int i = 0; i < incorrectWordList.size(); i++)
         {
             adapter.addItem(incorrectWordList.get(i).getWord(),incorrectWordList.get(i).getMeaning());
         }
         adapter.notifyDataSetChanged();
-*/
+
         okButton = findViewById(R.id.button_inwordlist_ok);
         saveFABButton = findViewById(R.id.fab_inwordlist_save);
         mainFABButton = findViewById(R.id.fab_inwordlist_main);
@@ -67,6 +67,10 @@ public class IncorrectWordListActivity extends AppCompatActivity {
                 changeFABState();
             }
         });
+    }
+    public void saveInwordListOnDB()
+    {
+
     }
     public void changeFABState()
     {

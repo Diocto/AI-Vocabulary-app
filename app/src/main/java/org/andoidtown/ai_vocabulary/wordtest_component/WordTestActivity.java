@@ -105,7 +105,7 @@ public class WordTestActivity extends AppCompatActivity {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String today = dateFormat.format(currentTime);
         String[] values = {today};
-        database = openOrCreateDatabase("vocabularyDataBase",MODE_PRIVATE,null);
+        database = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         Cursor groupCursor;
         try
         {

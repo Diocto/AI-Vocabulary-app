@@ -46,7 +46,7 @@ public class ManagementWordsFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_management_words, container, false);
 
-        db = getActivity().openOrCreateDatabase("vocabularyDataBase", Context.MODE_PRIVATE,null);
+        db = getActivity().openOrCreateDatabase(MainActivity.databaseName, Context.MODE_PRIVATE,null);
         showWordGroupListButton = rootView.findViewById(R.id.showWordsListButton);
         showWordGroupListButton.setOnClickListener( new View.OnClickListener(){
             @Override
