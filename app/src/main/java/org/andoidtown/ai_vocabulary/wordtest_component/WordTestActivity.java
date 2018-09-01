@@ -23,6 +23,7 @@ import android.widget.ViewSwitcher;
 
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.WordParceble;
+import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -234,7 +235,6 @@ public class WordTestActivity extends AppCompatActivity {
         alert.setCancelable(false);
         alert.setCanceledOnTouchOutside(false);
         alert.show();
-
     }
     public void setTextState()
     {
@@ -259,6 +259,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
     }
     public void onClickBlind(View view){
+        blind.setClickable(false);
         blind.startAnimation(alphaAnimation);
         blind.setVisibility(View.INVISIBLE);
     }
@@ -284,6 +285,7 @@ public class WordTestActivity extends AppCompatActivity {
         }
     }
     public void behindBlind(){
+        blind.setClickable(true);
         blind.setVisibility(View.VISIBLE);
     }
 }
