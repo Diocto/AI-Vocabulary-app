@@ -24,9 +24,6 @@ public class IncorrectWordListActivity extends AppCompatActivity {
     private FloatingActionButton mainFABButton;
     private FloatingActionButton saveFABButton;
     private FloatingActionButton printFABButton;
-    private LinearLayout saveFABLayout;
-    private LinearLayout printFABLayout;
-    private LinearLayout mainFABLayout;
 
     private boolean isFABOpen = false;
     private Animation fabOpen, fabClose;
