@@ -8,7 +8,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".wordtest_component.IncorrectWordListActivity">
+        <activity android:name=".mainactivity_component.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
         <activity android:name=".add_word_component.AddWordGruopActivity" />
         <activity android:name=".word_listview_component.WordListActivity" />
         <activity android:name=".wordtest_component.WordTestActivity" />
-        <activity android:name=".mainactivity_component.MainActivity" />
+        <activity android:name=".wordtest_component.IncorrectWordListActivity" />
 
     </application>
 
