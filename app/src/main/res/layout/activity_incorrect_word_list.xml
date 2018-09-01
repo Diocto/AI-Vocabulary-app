@@ -52,27 +52,29 @@
 
     <TextView
         android:id="@+id/text_inwordlist_printfab"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:text="프린트로 출력하기"
         android:textAlignment="textEnd"
         android:visibility="invisible"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_print"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_print"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_print"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_print" />
 
     <TextView
         android:id="@+id/text_inwordlist_savefab"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:text="목록 저장하기"
         android:textAlignment="textEnd"
         android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_save"
         app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_save"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,15 +82,17 @@
 
     <TextView
         android:id="@+id/text_inwordlist_mainfab"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:text=""
         android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_main"
         app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_main"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_main"
-        app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_main" />
+        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_main" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
