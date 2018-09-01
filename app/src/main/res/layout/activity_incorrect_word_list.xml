@@ -6,7 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".wordtest_component.IncorrectWordListActivity">
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_print"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_inwordlist_save"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:srcCompat="@drawable/ic_action_name"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="1.0"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_inwordlist_main"
+        app:layout_constraintTop_toBottomOf="@id/fab_inwordlist_print"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/fab_inwordlist_save"
+        app:srcCompat="@android:drawable/stat_sys_download_done" />
+
+    <TextView
+        android:id="@+id/text_inwordlist_savefab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:text="목록 저장하기"
+        android:textAlignment="textEnd"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/text_inwordlist_printfab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:text="프린트로 출력하기"
+        android:textAlignment="textEnd"
+        android:visibility="invisible" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -14,26 +79,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/text_inwordlist_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="3.5"
-                android:gravity="center"
+                android:gravity="left|center_vertical"
                 android:text=" 틀린 단어 리스트"
-                android:textAlignment="textStart"
                 android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/button_inwordlsit_print"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="프린트" />
 
             <Button
                 android:id="@+id/button_inwordlist_ok"
@@ -47,6 +105,8 @@
             android:id="@+id/listview_inwordlist_inwordlist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9" />
+            android:layout_weight="9">
+
+        </ListView>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
