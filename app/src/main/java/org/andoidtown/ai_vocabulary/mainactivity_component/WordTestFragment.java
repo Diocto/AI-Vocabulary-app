@@ -32,6 +32,14 @@ public class WordTestFragment extends Fragment {
     SQLiteDatabase db;
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+        setButtonText();
+        setStatusMyProgress();
+
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
