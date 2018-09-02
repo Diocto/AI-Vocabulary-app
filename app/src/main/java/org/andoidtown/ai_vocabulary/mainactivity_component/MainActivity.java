@@ -53,18 +53,20 @@ public class MainActivity extends AppCompatActivity {
         mainVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-                if (i == 1)
+                /*if (i == 1)
                 {
-                    ((WordTestFragment)wordTestFragment).setButtonText();
-                    ((WordTestFragment)wordTestFragment).setStatusMyProgress();
-                }
+                    if(wordTestFragment != null)
+                    {
+                        ((WordTestFragment)wordTestFragment).setButtonText();
+                        ((WordTestFragment)wordTestFragment).setStatusMyProgress();
+                    }
+                }*/
             }
 
             @Override
             public void onPageSelected(int i) {
                 setButtonNotSelected(pagerButtonList.get(i));
                 setButtonSelected(pagerButtonList.get(i));
-
             }
 
             @Override
