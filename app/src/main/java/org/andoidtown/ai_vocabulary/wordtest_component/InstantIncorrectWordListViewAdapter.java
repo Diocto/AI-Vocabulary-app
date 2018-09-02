@@ -10,8 +10,8 @@ import android.widget.TextView;
 import org.andoidtown.ai_vocabulary.R;
 
 import java.util.ArrayList;
-public class IncorrectWordListViewAdapter extends BaseAdapter{
-    private ArrayList<IncorrectWordListViewItem> listItem = new ArrayList<>();
+public class InstantIncorrectWordListViewAdapter extends BaseAdapter{
+    private ArrayList<InstantIncorrectWordListViewItem> listItem = new ArrayList<>();
     @Override
     public int getCount() {
         return listItem.size();
@@ -28,7 +28,7 @@ public class IncorrectWordListViewAdapter extends BaseAdapter{
     }
     public void addItem(String word, String meaning)
     {
-        IncorrectWordListViewItem item = new IncorrectWordListViewItem(word, meaning);
+        InstantIncorrectWordListViewItem item = new InstantIncorrectWordListViewItem(word, meaning);
         listItem.add(item);
     }
     @Override

@@ -1,5 +1,6 @@
 package org.andoidtown.ai_vocabulary.wordtest_component;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,17 +9,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.WordParceble;
+import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class IncorrectWordListActivity extends AppCompatActivity {
+public class InstantIncorrectWordListActivity extends AppCompatActivity {
     private ArrayList<WordParceble> incorrectWordList;
     private ListView incorrectListView;
     private Button okButton;
@@ -29,17 +33,17 @@ public class IncorrectWordListActivity extends AppCompatActivity {
     private TextView printFABText;
     private boolean isFABOpen = false;
     private Animation fabOpen, fabClose;
-    IncorrectWordListViewAdapter adapter;
+    InstantIncorrectWordListViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_incorrect_word_list);
+        setContentView(R.layout.activity_instant_incorrect_word_list);
 
         incorrectWordList = new ArrayList<>();
         incorrectWordList = getIntent().getParcelableArrayListExtra("incorrectList");
 
         incorrectListView = findViewById(R.id.listview_inwordlist_inwordlist);
-        adapter = new IncorrectWordListViewAdapter();
+        adapter = new InstantIncorrectWordListViewAdapter();
         incorrectListView.setAdapter(adapter);
         incorrectWordList = getIntent().getExtras().getParcelableArrayList("incorrectList");
 
@@ -67,10 +71,30 @@ public class IncorrectWordListActivity extends AppCompatActivity {
                 changeFABState();
             }
         });
+        saveFABButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                saveInwordListOnDB();
+            }
+        });
     }
     public void saveInwordListOnDB()
     {
-
+        SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
+        String values[] = {"","",""};
+        String groupName = "";
+        Date nowDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        groupName = dateFormat.format(nowDate);
+        groupName = "틀린단어 (" + groupName + ")";
+        for (WordParceble word : incorrectWordList)
+        {
+            values[0] = word.getWord(); values[1] = word.getMeaning(); values[2] = groupName;
+            db.execSQL("insert into incorrect_word(incorrect_word, incorrect_word_meaning, incorrect_word_group_name) values(?,?,?)",values);
+        }
+        Toast.makeText(this,"틀린단어 목록에 저장되었습니다",Toast.LENGTH_LONG).show();
+        closeFABs();
     }
     public void changeFABState()
     {

@@ -39,11 +39,11 @@
                     android:text="단어목록 보기" />
 
                 <Button
-                    android:id="@+id/showTestLogButton"
+                    android:id="@+id/button_management_showInword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="시험기록 보기" />
+                    android:text="틀린 단어 보기" />
 
                 <Button
                     android:id="@+id/optionButton"

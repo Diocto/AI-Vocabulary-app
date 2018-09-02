@@ -1,9 +1,9 @@
 package org.andoidtown.ai_vocabulary.wordtest_component;
 
-public class IncorrectWordListViewItem {
+public class InstantIncorrectWordListViewItem {
     private String word;
     private String meaning;
-    public IncorrectWordListViewItem(String word, String meaning)
+    public InstantIncorrectWordListViewItem(String word, String meaning)
     {
         this.word = word;
         this.meaning = meaning;

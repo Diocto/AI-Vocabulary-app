@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".wordtest_component.InstantIncorrectWordListActivity">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_print"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_inwordlist_save"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:srcCompat="@drawable/ic_action_name"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="1.0"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_inwordlist_main"
+        app:layout_constraintTop_toBottomOf="@id/fab_inwordlist_print"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_inwordlist_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/fab_inwordlist_save"
+        app:srcCompat="@android:drawable/stat_sys_download_done" />
+
+    <TextView
+        android:id="@+id/text_inwordlist_printfab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="프린트로 출력하기"
+        android:textAlignment="textEnd"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_print"
+        app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_print"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_print" />
+
+    <TextView
+        android:id="@+id/text_inwordlist_savefab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="목록 저장하기"
+        android:textAlignment="textEnd"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_save"
+        app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_save" />
+
+    <TextView
+        android:id="@+id/text_inwordlist_mainfab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text=""
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintBottom_toBottomOf="@id/fab_inwordlist_main"
+        app:layout_constraintEnd_toStartOf="@id/fab_inwordlist_main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fab_inwordlist_main" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_inwordlist_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="3.5"
+                android:gravity="left|center_vertical"
+                android:text=" 틀린 단어 리스트"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/button_inwordlist_ok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="확인" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listview_inwordlist_inwordlist"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9">
+
+        </ListView>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

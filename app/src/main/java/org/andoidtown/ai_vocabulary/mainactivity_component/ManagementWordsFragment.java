@@ -13,22 +13,15 @@ import android.widget.Button;
 
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.add_word_component.AddWordGruopActivity;
+import org.andoidtown.ai_vocabulary.incorrect_word_list_component.IncorrectWordGroupListActivity;
 import org.andoidtown.ai_vocabulary.word_listview_component.WordGroupListViewActivity;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ManagementWordsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ManagementWordsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ManagementWordsFragment extends Fragment {
-
     Button showWordGroupListButton;
     Button showAddWGListViewButton;
     Button deleteAllWordButton;
+    Button showIncorrectWordButton;
     SQLiteDatabase db;
     public ManagementWordsFragment() {
         // Required empty public constructor
@@ -61,6 +54,15 @@ public class ManagementWordsFragment extends Fragment {
             public void onClick(View view)
             {
                 Intent intent = new Intent(getActivity(), AddWordGruopActivity.class);
+                startActivity(intent);
+            }
+        });
+        showIncorrectWordButton = rootView.findViewById(R.id.button_management_showInword);
+        showIncorrectWordButton.setOnClickListener( new View.OnClickListener() {
+           @Override
+           public void onClick(View view)
+            {
+                Intent intent = new Intent(getActivity(), IncorrectWordGroupListActivity.class);
                 startActivity(intent);
             }
         });

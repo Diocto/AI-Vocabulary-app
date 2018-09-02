@@ -23,7 +23,7 @@
             android:weightSum="6">
 
             <TextView
-                android:id="@+id/text_inword_title"
+                android:id="@+id/text_inwordgroup_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -33,7 +33,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/button_inword_back"
+                android:id="@+id/button_inwordgroup_back"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -42,7 +42,7 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/listview_inword_grouplist"
+            android:id="@+id/listview_inwordgroup_grouplist"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
 public class WordListActivity extends AppCompatActivity {
     ListView listView;

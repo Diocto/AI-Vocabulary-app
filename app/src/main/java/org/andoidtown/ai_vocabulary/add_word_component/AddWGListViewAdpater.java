@@ -38,7 +38,6 @@ public class AddWGListViewAdpater extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-        final int pos = i;
         final Context context = parent.getContext();
         View view = convertView;
         ViewHolder viewHolder;
@@ -59,8 +58,8 @@ public class AddWGListViewAdpater extends BaseAdapter {
         }
         viewHolder.word.setText(myItemList.get(i).word);
         viewHolder.meaning.setText(myItemList.get(i).wordsMeaning);
-        viewHolder.word.setId(pos);
-        viewHolder.meaning.setId(pos);
+        viewHolder.word.setId(i);
+        viewHolder.meaning.setId(i);
         viewHolder.word.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

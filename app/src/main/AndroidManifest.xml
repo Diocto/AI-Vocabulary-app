@@ -19,8 +19,9 @@
         <activity android:name=".add_word_component.AddWordGruopActivity" />
         <activity android:name=".word_listview_component.WordListActivity" />
         <activity android:name=".wordtest_component.WordTestActivity" />
-        <activity android:name=".wordtest_component.IncorrectWordListActivity" />
-
+        <activity android:name=".wordtest_component.InstantIncorrectWordListActivity" />
+        <activity android:name=".incorrect_word_list_component.IncorrectWordGroupListActivity"></activity>
+        <activity android:name=".incorrect_word_list_component.IncorrectWordListActivity"></activity>
     </application>
 
 </manifest>

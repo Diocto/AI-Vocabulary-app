@@ -225,7 +225,7 @@ public class WordTestActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("incorrectList",incorrectWordList);
-                Intent intent = new Intent(WordTestActivity.this, IncorrectWordListActivity.class);
+                Intent intent = new Intent(WordTestActivity.this, InstantIncorrectWordListActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
