@@ -82,12 +82,14 @@ public class WordTestFragment extends Fragment {
             String testDate = dataFormat.format(calendar.getTime());
             textOfButton = testDate + " 시험\n" + "클릭해서 시험 시작";
             testWordButton.setText(textOfButton);
+            testWordButton.setClickable(true);
         }
         else
         {
             textOfButton = "오늘 볼 시험이 없습니다";
             testWordButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             testWordButton.setText(textOfButton);
+            testWordButton.setClickable(false);
         }
 
     }
