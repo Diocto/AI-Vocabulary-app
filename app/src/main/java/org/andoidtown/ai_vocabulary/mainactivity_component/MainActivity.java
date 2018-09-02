@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             createWordTable();
             createWordGroupTable();
             createWordTestTable();
-            createIncorrectWordList();
+            createIncorrectWordListTable();
         }
     }
     private boolean createDatabase(String databaseName) {
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("exception", ex.toString());
         }
     }
-    private void createIncorrectWordList()
+    private void createIncorrectWordListTable()
     {
         try{
             db.execSQL("create table incorrect_word (" +
