@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             createIncorrectWordListTable();
         }
     }
-    private boolean createDatabase(String databaseName) {
+    private boolean createDatabase(String databaseName)
+    {
         try{
 
             db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
@@ -104,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    private void createWordTable() {
+    private void createWordTable()
+    {
         try{
             db.execSQL("create table word(" +
                     "value text," +
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("exception",ex.toString());
         }
     }
-
     private void createWordTestTable()
     {
         try{
@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     public void setButtonSelected(Button view)
     {
         view.setBackgroundColor(getResources().getColor(R.color.colorAccent));

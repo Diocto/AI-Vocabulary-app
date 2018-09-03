@@ -1,5 +1,9 @@
 package org.andoidtown.ai_vocabulary.add_word_component;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,27 +43,65 @@ public class AddWordGruopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word_gruop);
-        SeekbarDialog seekbarDialog = new SeekbarDialog(this);
-        seekbarDialog.show();
+        if(isTodaysTest())
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("오늘자 시험을 봐야 단어를 추가 할 수 있습니다");
+            builder.setCancelable(false);
+            builder.setPositiveButton("확인",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.show();
+        }
+        else
+        {
+            SeekbarDialog seekbarDialog = new SeekbarDialog(this);
+            seekbarDialog.setCancelable(false);
+            seekbarDialog.show();
 
-        listview = findViewById(R.id.addWordListView);
-        adapter = new AddWGListViewAdpater(this,itemList);
-        listview.setAdapter(adapter);
-        wgName = findViewById(R.id.edit_addwg_wgname);
-        cancelButton = findViewById(R.id.cancelAddButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        addWGButton = findViewById(R.id.addWGToDBButton);
+            listview = findViewById(R.id.addWordListView);
+            adapter = new AddWGListViewAdpater(this,itemList);
+            listview.setAdapter(adapter);
+            wgName = findViewById(R.id.edit_addwg_wgname);
+            cancelButton = findViewById(R.id.cancelAddButton);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            addWGButton = findViewById(R.id.addWGToDBButton);
+        }
     }
     public void setEditTextNum(Integer i)
     {
         this.numOfEditText = i;
     }
-
+    public boolean isTodaysTest()
+    {
+        boolean thereIsTodaysTest = false;
+        try{
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String today = dateFormat.format(date);
+            String values[] = {today};
+            SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
+            Cursor cursor = db.rawQuery("select * from word_group where next_test_date = ?",values);
+            if (cursor.getCount() > 0)
+            {
+                thereIsTodaysTest = true;
+                Log.d("테스트 결과","오늘 테스트 있음");
+            }
+        } catch(Exception ex)
+        {
+            Log.d("SQLerror",ex.toString());
+        }
+        return thereIsTodaysTest;
+    }
     public void onClickAddWGButton(View view)
     {
         SQLiteDatabase db;
