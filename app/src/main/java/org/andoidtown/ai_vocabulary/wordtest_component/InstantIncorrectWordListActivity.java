@@ -90,6 +90,7 @@ public class InstantIncorrectWordListActivity extends AppCompatActivity {
         groupName = "틀린단어 (" + groupName + ")";
         for (WordParceble word : incorrectWordList)
         {
+            
             values[0] = word.getWord(); values[1] = word.getMeaning(); values[2] = groupName;
             db.execSQL("insert into incorrect_word(incorrect_word, incorrect_word_meaning, incorrect_word_group_name) values(?,?,?)",values);
         }

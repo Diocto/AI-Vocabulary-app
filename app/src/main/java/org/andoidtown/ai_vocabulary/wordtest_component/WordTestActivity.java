@@ -238,6 +238,13 @@ public class WordTestActivity extends AppCompatActivity
     }
     public void processExitAllTest()
     {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = dateFormat.format(date);
+        String values[] = {today, Integer.toString(correctNum),Integer.toString(inCorrectNum),timerTextView.getText().toString()};
+        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time)" +
+                " values(?,?,?,?)",values);
+        testTimer.cancel();
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
         alert_confirm.setCancelable(false);
         alert_confirm.setMessage("시험이 종료되었습니다! \n 확인 버튼을 누르면 결과로 넘어갑니다.");
@@ -254,12 +261,6 @@ public class WordTestActivity extends AppCompatActivity
                 finish();
             }
         });
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String today = dateFormat.format(date);
-        String values[] = {today, Integer.toString(correctNum),Integer.toString(inCorrectNum),timerTextView.getText().toString()};
-        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time)" +
-                " values(?,?,?,?)",values);
         AlertDialog alert = alert_confirm.create();
         alert.setCancelable(false);
         alert.setCanceledOnTouchOutside(false);
