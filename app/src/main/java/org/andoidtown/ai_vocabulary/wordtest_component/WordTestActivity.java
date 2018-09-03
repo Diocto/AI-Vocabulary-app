@@ -29,12 +29,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class WordTestActivity extends AppCompatActivity {
+public class WordTestActivity extends AppCompatActivity
+{
     TextSwitcher wordSwitcher;
     TextView meaningTextView;
     TextView remainWordTextView;
     TextView remainGroupTextView;
+    TextView timerTextView;
     ImageView blind;
     ArrayList<WordParceble> wordList;;
     int nowWordIndex = 0;
@@ -51,8 +55,11 @@ public class WordTestActivity extends AppCompatActivity {
     SQLiteDatabase database;
     SimpleDateFormat dateFormat;
     Animation slide_in_left, slide_out_right;
+    Timer testTimer;
+    TimerTask testTimerTask;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_test);
         initViews();
@@ -69,18 +76,24 @@ public class WordTestActivity extends AppCompatActivity {
         }
         incorrectWordList = new ArrayList<>();
         setTextState();
+        testTimer = new Timer();
+        testTimerTask = new TestTimer();
+        testTimer.schedule(testTimerTask,0,1000);
     }
 
-    private void initViews() {
+    private void initViews()
+    {
         alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
         alphaAnimation.setDuration(200);
         meaningTextView = findViewById(R.id.text_wordtest_meaning);
         remainGroupTextView = findViewById(R.id.text_wordtest_remainWGnum);
         remainWordTextView = findViewById(R.id.text_wordtest_remainword);
         wordSwitcher = (TextSwitcher) findViewById(R.id.switcher_wordtest_word);
-        wordSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+        wordSwitcher.setFactory(new ViewSwitcher.ViewFactory()
+        {
             @Override
-            public View makeView() {
+            public View makeView()
+            {
                 TextView t = new TextView(WordTestActivity.this);
                 t.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL);
                 t.setTextSize(36);
@@ -95,9 +108,11 @@ public class WordTestActivity extends AppCompatActivity {
                 android.R.anim.slide_out_right);
         wordSwitcher.setInAnimation(slide_in_left);
         wordSwitcher.setOutAnimation(slide_out_right);
+        timerTextView = findViewById(R.id.text_wordtest_timer);
     }
 
-    private void loadDBtoLocal() {
+    private void loadDBtoLocal()
+    {
         wordList = new ArrayList<>();
         groupWordNums = new ArrayList<>();
         groupNames = new ArrayList<>();
@@ -131,7 +146,8 @@ public class WordTestActivity extends AppCompatActivity {
         }
     }
 
-    public void showNextWord(){
+    public void showNextWord()
+    {
         behindBlind();
         nowWordIndex++;
         nowTotalWordIndex++;
@@ -144,7 +160,8 @@ public class WordTestActivity extends AppCompatActivity {
         setTextState();
     }
 
-    public void processExitGroupTest() {
+    public void processExitGroupTest()
+    {
         String[] values = {groupNames.get(nowGroupIndex)};
         Cursor groupCursor = database.rawQuery("select * from word_group where group_name = ?",values);
         Cursor testCursor = database.rawQuery("select * from word_test where group_name = ?",values);
@@ -160,12 +177,15 @@ public class WordTestActivity extends AppCompatActivity {
         nowWordIndex = 0;
     }
 
-    private void setButtonDelay(final View view, int milli) {
+    private void setButtonDelay(final View view, int milli)
+    {
         view.setEnabled(false); // 클릭 무효화
         Handler h = new Handler();
-        h.postDelayed(new Runnable() {
+        h.postDelayed(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 view.setEnabled(true);
             }
         }, milli);
@@ -216,13 +236,16 @@ public class WordTestActivity extends AppCompatActivity {
             showNextWord();
         }
     }
-    public void processExitAllTest() {
+    public void processExitAllTest()
+    {
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
         alert_confirm.setCancelable(false);
         alert_confirm.setMessage("시험이 종료되었습니다! \n 확인 버튼을 누르면 결과로 넘어갑니다.");
-        alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+        alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener()
+        {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("incorrectList",incorrectWordList);
                 Intent intent = new Intent(WordTestActivity.this, InstantIncorrectWordListActivity.class);
@@ -231,6 +254,12 @@ public class WordTestActivity extends AppCompatActivity {
                 finish();
             }
         });
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = dateFormat.format(date);
+        String values[] = {today, Integer.toString(correctNum),Integer.toString(inCorrectNum),timerTextView.getText().toString()};
+        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time)" +
+                " values(?,?,?,?)",values);
         AlertDialog alert = alert_confirm.create();
         alert.setCancelable(false);
         alert.setCanceledOnTouchOutside(false);
@@ -238,17 +267,14 @@ public class WordTestActivity extends AppCompatActivity {
     }
     public void setTextState()
     {
-        String remainGruop = (nowGroupIndex + 1) + "/" + groupWordNums.size();
-        String remainWord = (nowWordIndex + 1) + "/" + groupWordNums.get(nowGroupIndex);
+        String remainGruop = "단어뭉치 " + (nowGroupIndex + 1) + "/" + groupWordNums.size();
+        String remainWord = "단어" + (nowWordIndex + 1) + "/" + groupWordNums.get(nowGroupIndex);
 
         remainGroupTextView.setText(remainGruop);
         remainWordTextView.setText(remainWord);
-
     }
     public boolean isFinalWord()
     {
-  //      Toast.makeText(this,"inc, cor, total : " + inCorrectNum + ", " + correctNum + ", " + totalWordNum
-  //              ,Toast.LENGTH_LONG).show();
         if (inCorrectNum + correctNum == totalWordNum)
         {
             return true;
@@ -263,7 +289,8 @@ public class WordTestActivity extends AppCompatActivity {
         blind.startAnimation(alphaAnimation);
         blind.setVisibility(View.INVISIBLE);
     }
-    public int getNextTestDay(int testNumber) {
+    public int getNextTestDay(int testNumber)
+    {
         switch (testNumber)
         {
             case 0:
@@ -284,8 +311,29 @@ public class WordTestActivity extends AppCompatActivity {
                 return 0;
         }
     }
-    public void behindBlind(){
+    public void behindBlind()
+    {
         blind.setClickable(true);
         blind.setVisibility(View.VISIBLE);
+    }
+
+    class TestTimer extends TimerTask
+    {
+        private long startTimeMillis;
+        TestTimer()
+        {
+            startTimeMillis = System.currentTimeMillis();
+        }
+        @Override
+        public void run()
+        {
+             long nowMillis = System.currentTimeMillis() - startTimeMillis;
+             long seconds = nowMillis / 1000;
+             long minutes = seconds / 60;
+             long hour = minutes / 60;
+             seconds = seconds % 60;
+             String nowTime = String.format("%02d",hour) + ":" + String.format("%02d",minutes) + ":" + String.format("%02d",seconds);
+             timerTextView.setText(nowTime);
+        }
     }
 }
