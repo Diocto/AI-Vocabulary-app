@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class AddWordGruopActivity extends AppCompatActivity {
     Button cancelButton;
     Button addWGButton;
@@ -85,10 +87,9 @@ public class AddWordGruopActivity extends AppCompatActivity {
     {
         boolean thereIsTodaysTest = false;
         try{
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String today = dateFormat.format(date);
-            String values[] = {today};
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String values[] = {dataFormat.format(calendar.getTime())};
             SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
             Cursor cursor = db.rawQuery("select * from word_group where next_test_date = ?",values);
             if (cursor.getCount() > 0)
