@@ -1,6 +1,8 @@
 package org.andoidtown.ai_vocabulary.mainactivity_component;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -12,7 +14,13 @@ import android.widget.Button;
 
 import org.andoidtown.ai_vocabulary.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager mainVP;
@@ -25,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment achievementFragment;
     Fragment wordTestFragment;
     Fragment managementWordFragment;
+    static SimpleDateFormat format;
     public static final String databaseName = "vocabularyDataBase";
     boolean isFirst = true;
     @Override
@@ -92,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
             createWordTestTable();
             createIncorrectWordListTable();
         }
+        AdjustDateManager adjustDateManager = new AdjustDateManager();
+        adjustDateManager.adjustTestDate();
     }
     private boolean createDatabase(String databaseName)
     {
@@ -166,6 +177,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("exception", ex.toString());
         }
     }
+
+    public SimpleDateFormat getStandardFormat()
+    {
+        if(format == null)
+        {
+            format = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        }
+        return format;
+    }
     public void setButtonNotSelected(Button view)
     {
         for(int i = 0; i < pagerButtonList.size(); i++)
@@ -176,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     public void setButtonSelected(Button view)
     {
         view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -191,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             mainVP.setCurrentItem(tag);
         }
     };
+
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
         public PagerAdapter(android.support.v4.app.FragmentManager  fm)
@@ -227,4 +247,87 @@ public class MainActivity extends AppCompatActivity {
     {
         return this.db;
     }
+    public class AdjustDateManager
+    {
+        public void adjustTestDate()
+        {
+            long diffDay = getDiffLastTestDayToToday();
+            if(diffDay > 1)
+            {
+                diffDay--;
+            }
+            else if(diffDay == -1)
+            {
+                diffDay = getDiffFirstTestDayToToday();
+            }
+
+            queryToAdjustTestDates(diffDay);
+        }
+        public long getDiffFirstTestDayToToday()
+        {
+            long diffDay = -1;
+            Cursor cursor = db.rawQuery("SELECT next_test_date FROM word_group",null);
+            boolean isFirstTest = cursor.getCount() == 1;
+            if(isFirstTest) {
+                cursor.moveToNext();
+                Date today = Calendar.getInstance().getTime();
+                Date firstTestDay = stringToDate(cursor.getString(0));
+                diffDay = getMilliTimeDifference(today, firstTestDay);
+            }
+            return diffDay;
+        }
+        public long getDiffLastTestDayToToday()
+        {
+            long diffDay = -1;
+            Date lastTestDay;
+            Date today;
+            if(db == null)
+            {
+                db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
+            }
+
+            try
+            {
+                Cursor cursor = db.rawQuery("select MAX(test_date) from word_test",null);if(cursor.getCount() != 0);
+                boolean isThereTestLog= cursor.getCount() != 0;
+                if(isThereTestLog)
+                {
+                    cursor.moveToNext();
+                    lastTestDay = stringToDate(cursor.getString(0));
+                    Calendar calendar = Calendar.getInstance();
+                    today = calendar.getTime();
+                    long diffMillis = getMilliTimeDifference(today, lastTestDay);
+                    diffDay = TimeUnit.DAYS.convert(diffMillis,TimeUnit.MICROSECONDS);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.d("adjustTestException",ex.toString());
+                diffDay = -1;
+            }
+            return diffDay;
+        }
+        public Date stringToDate(String date)
+        {
+            Date lastTestDay = new Date();
+            SimpleDateFormat dateFormat = getStandardFormat();
+            try {
+                lastTestDay = dateFormat.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return lastTestDay;
+        }
+        public long getMilliTimeDifference(Date substractee, Date substracter)
+        {
+            long diffMillis = substractee.getTime() - substracter.getTime();
+            return TimeUnit.DAYS.convert(diffMillis,TimeUnit.MICROSECONDS);
+        }
+        public void queryToAdjustTestDates(long diffDay)
+        {
+            SQLiteDatabase db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
+            String values[] = {Long.toString(diffDay)};
+            db.execSQL("update word_group set next_test_date = datetime(next_test_date,'+'+?+' day')",values);
+        }
+    };
 }
