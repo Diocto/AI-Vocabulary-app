@@ -238,7 +238,7 @@ public class WordTestActivity extends AppCompatActivity
     }
     public void processExitAllTest()
     {
-        Date date = new Date();
+        Date date = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String today = dateFormat.format(date);
         String values[] = {today, Integer.toString(correctNum),Integer.toString(inCorrectNum),timerTextView.getText().toString()};

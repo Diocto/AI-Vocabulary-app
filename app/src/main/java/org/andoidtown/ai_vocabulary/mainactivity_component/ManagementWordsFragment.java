@@ -74,6 +74,7 @@ public class ManagementWordsFragment extends Fragment {
                     db.execSQL("drop table if exists word");
                     db.execSQL("drop table if exists word_group");
                     db.execSQL("drop table if exists word_test");
+                    db.execSQL("drop table if exists incorrect_word");
                 } catch (Exception ex)
                 {
                     Log.d("sqlerror",ex.toString());
