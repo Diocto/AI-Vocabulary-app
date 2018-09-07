@@ -141,8 +141,8 @@ public class AddWordGruopActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         String today = dateFormat.format(cal.getTime());
+        cal.add(Calendar.DATE,1);
         String testDay = dateFormat.format(cal.getTime());
-
         String values[] = {groupName, today,testDay};
         try{
             db.execSQL("insert into word_group(group_name, registered_date, next_test_date)" +
