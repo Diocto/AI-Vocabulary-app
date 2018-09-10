@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public android.support.v4.app.Fragment getItem(int position)
         {
-            Log.d("메시지", "getItem in pagetAdapter 호출됨");
             switch (position) {
                 case 0:
                     achievementFragment = new AchievementGraphFragment();
