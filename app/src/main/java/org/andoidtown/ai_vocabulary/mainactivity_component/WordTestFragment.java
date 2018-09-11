@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.andoidtown.ai_vocabulary.R;
+import org.andoidtown.ai_vocabulary.StandardDataManager;
 import org.andoidtown.ai_vocabulary.wordtest_component.WordTestActivity;
 
 import java.text.SimpleDateFormat;
@@ -102,13 +103,13 @@ public class WordTestFragment extends Fragment {
         numOfRegisteredWord.setText(cursor.getString(0));
 
 
-        cursor = db.rawQuery("select count(*) from word where correct_answer_num > incorrect_answer_num",null);
+        cursor = db.rawQuery("select count(*) from word where " + StandardDataManager.getMemorizedStandard(),null);
         cursor.moveToNext();
         numOfMemorizedWord.setText(cursor.getString(0));
-        cursor = db.rawQuery("select count(*) from word where correct_answer_num < incorrect_answer_num",null);
+        cursor = db.rawQuery("select count(*) from word where " + StandardDataManager.getNotMemorizedStandard(),null);
         cursor.moveToNext();
         numOfNotMemorizedWord.setText(cursor.getString(0));
-        cursor = db.rawQuery("select count(*) from word where correct_answer_num > 5", null);
+        cursor = db.rawQuery("select count(*) from word where " + StandardDataManager.getPerpectWordStandard(), null);
         cursor.moveToNext();
         numOfPerfectWord.setText(cursor.getString(0));
     }
