@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,9 @@ public class WordTestFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
         String values[] = {dataFormat.format(calendar.getTime())};
-        Cursor cursor = db.rawQuery("select * from word_group where next_test_date = ?",values);
+        values[0] = values[0].substring(0,10) + " 00:00:00";
+        Log.d("comapre",values[0]);
+        Cursor cursor = db.rawQuery("select * from word_group where next_test_date =?",values);
         String textOfButton;
         if (cursor.getCount() != 0)
         {

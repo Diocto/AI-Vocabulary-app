@@ -50,8 +50,6 @@ public class WordGroupListViewActivity extends AppCompatActivity {
             {
                 cursor.moveToNext();
                 adapter.addItem(cursor.getString(0),cursor.getString(1),cursor.getString(2));
-                Log.d("getItem", cursor.toString());
-                Log.d("커서이동수",Integer.toString(i));
             }
         } catch (Exception ex)
         {

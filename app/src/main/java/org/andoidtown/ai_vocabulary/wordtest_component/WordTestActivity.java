@@ -64,7 +64,7 @@ public class WordTestActivity extends AppCompatActivity
         setContentView(R.layout.activity_word_test);
         initViews();
         loadDBtoLocal();
-        if(groupNum != 0)
+        if(groupNum != 0 && wordList.size() != 0)
         {
             wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getWord()));
             meaningTextView.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getMeaning()));
@@ -119,7 +119,7 @@ public class WordTestActivity extends AppCompatActivity
         Date currentTime = Calendar.getInstance().getTime();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String today = dateFormat.format(currentTime);
-        String[] values = {today};
+        String[] values = {today + " 00:00:00"};
         database = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         Cursor groupCursor;
         try

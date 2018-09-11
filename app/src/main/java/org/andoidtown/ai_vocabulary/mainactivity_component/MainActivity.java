@@ -305,7 +305,9 @@ public class MainActivity extends AppCompatActivity {
                 Date today = stringToDate(getStandardFormat().format(Calendar.getInstance().getTime()));
                 Date firstTestDay = stringToDate(cursor.getString(0));
                 diffDay = getDayDifference(today, firstTestDay);
-                Log.d("diffDayInFirstTest",Long.toString(diffDay));
+                Log.d("today",today.toString());
+                Log.d("firstDay",firstTestDay.toString());
+                Log.d("diffDay",Long.toString(diffDay));
             }
             return diffDay;
         }
@@ -313,9 +315,11 @@ public class MainActivity extends AppCompatActivity {
         {
             Date lastTestDay = new Date();
             SimpleDateFormat dateFormat = getStandardFormat();
+
             if(!date.equals(""));
             {
                 try {
+                    Log.d("date",date);
                     lastTestDay = dateFormat.parse(date);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -326,14 +330,19 @@ public class MainActivity extends AppCompatActivity {
         public long getDayDifference(Date substractee, Date substracter)
         {
             long diffMillis = substractee.getTime() - substracter.getTime();
-            return TimeUnit.DAYS.convert(diffMillis,TimeUnit.MICROSECONDS);
+            Log.d("diffMilli",Long.toString(diffMillis));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(diffMillis);
+            long diffDay = calendar.get(Calendar.DAY_OF_MONTH) - 1;
+            Log.d("diffDay",Long.toString(diffDay));
+            return diffDay;
         }
         public void queryToAdjustTestDates(long diffDay)
         {
             Log.d("차이값 조정",Long.toString(diffDay));
             SQLiteDatabase db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
-            String values[] = {Long.toString(diffDay)};
-            db.execSQL("update word_group set next_test_date = datetime(next_test_date,'+'+?+' day')",values);
+            String values[] = {};
+            db.execSQL("update word_group set next_test_date = datetime(next_test_date,'+"+diffDay+" day')",values);
         }
     }
 }
