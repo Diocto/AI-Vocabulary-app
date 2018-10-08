@@ -14,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.WordParceble;
 import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class InstantIncorrectWordListActivity extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class InstantIncorrectWordListActivity extends AppCompatActivity {
     private TextView printFABText;
     private boolean isFABOpen = false;
     private Animation fabOpen, fabClose;
+    private DateProcessManager dateProcessManager = new DateProcessManager();
     InstantIncorrectWordListViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +87,8 @@ public class InstantIncorrectWordListActivity extends AppCompatActivity {
         SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
         String values[] = {"","",""};
         String groupName = "";
-        Date nowDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        groupName = dateFormat.format(nowDate);
+        Date nowDate = Calendar.getInstance().getTime();
+        groupName = dateProcessManager.getFormattedDate(nowDate);
         groupName = "틀린단어 (" + groupName + ")";
         for (WordParceble word : incorrectWordList)
         {
