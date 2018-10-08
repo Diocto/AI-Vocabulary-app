@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
 
@@ -32,6 +33,7 @@ public class AddWordGruopActivity extends AppCompatActivity {
     ListView listview;
     Integer numOfEditText = 1;
     ArrayList<AddWGListViewItem> itemList = new ArrayList<>();
+    DateProcessManager dateProcessManager = new DateProcessManager();
     public void notifyListViewDataChanged()
     {
         for (int i = 0; i < numOfEditText; i++)
@@ -88,8 +90,9 @@ public class AddWordGruopActivity extends AppCompatActivity {
         boolean thereIsTodaysTest = false;
         try{
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String values[] = {dataFormat.format(calendar.getTime())};
+            DateProcessManager dateProcessManager = new DateProcessManager();
+            String value = dateProcessManager.getFormattedDate(calendar.getTime());
+            String values[] = {value};
             SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
             Cursor cursor = db.rawQuery("select * from word_group where next_test_date = ?",values);
             if (cursor.getCount() > 0)
@@ -116,10 +119,8 @@ public class AddWordGruopActivity extends AppCompatActivity {
 
         String groupName = wgName.getText().toString();
         if(groupName.equals("")) {
-
             Date currentTime = Calendar.getInstance().getTime();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            groupName = dateFormat.format(currentTime);
+            groupName = dateProcessManager.getFormattedDate(currentTime);
         }
 
         for (int i = 0; i < adapter.getCount(); i++)
@@ -138,10 +139,9 @@ public class AddWordGruopActivity extends AppCompatActivity {
     }
 
     private void insertWGToDB(String groupName, SQLiteDatabase db) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
-        String today = dateFormat.format(cal.getTime());
-        String testDay = dateFormat.format(cal.getTime());
+        String today = dateProcessManager.getFormattedDate(cal.getTime());
+        String testDay = dateProcessManager.getFormattedDate(cal.getTime());
         String values[] = {groupName, today,testDay};
         try{
             db.execSQL("insert into word_group(group_name, registered_date, next_test_date)" +

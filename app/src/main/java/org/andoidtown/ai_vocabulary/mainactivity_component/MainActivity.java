@@ -1,6 +1,5 @@
 package org.andoidtown.ai_vocabulary.mainactivity_component;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,24 +10,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.andoidtown.ai_vocabulary.Manager.AdjustDateManager;
 import org.andoidtown.ai_vocabulary.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
+    public SQLiteDatabase db;
     ViewPager mainVP;
     PagerAdapter pagerAdapter;
     ArrayList<Button> pagerButtonList;
     Button graphTapButton;
     Button testTapButton;
     Button managementTapButton;
-    SQLiteDatabase db;
     Fragment achievementFragment;
     Fragment wordTestFragment;
     Fragment managementWordFragment;
@@ -78,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int i) {
-
             }
         });
         mainVP.setCurrentItem(1);
-
+        db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
         graphTapButton.setOnClickListener(movePageListener);
         graphTapButton.setTag(0);
         testTapButton.setOnClickListener(movePageListener);
@@ -100,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             createWordTestTable();
             createIncorrectWordListTable();
         }
-        AdjustDateManager adjustDateManager = new AdjustDateManager();
-        adjustDateManager.adjustTestDate();
+        AdjustDateManager adjustDateManager = new AdjustDateManager(db);
+        adjustDateManager.adjustTestDate(Calendar.getInstance());
     }
     private boolean createDatabase(String databaseName)
     {
@@ -123,9 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     "meaning text," +
                     "correct_answer_num integer," +
                     "incorrect_answer_num integer," +
-                    "group_name text" +
-                    "" +
-                    ");");
+                    "group_name text)");
         }
         catch(Exception ex)
         {
@@ -177,14 +171,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public SimpleDateFormat getStandardFormat()
-    {
-        if(format == null)
-        {
-            format = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-        }
-        return format;
-    }
     public void setButtonNotSelected(Button view)
     {
         for(int i = 0; i < pagerButtonList.size(); i++)
@@ -244,105 +230,5 @@ public class MainActivity extends AppCompatActivity {
     public SQLiteDatabase getDB()
     {
         return this.db;
-    }
-    public class AdjustDateManager
-    {
-        public void adjustTestDate()
-        {
-            long diffDay = getDiffLastTestDayToToday();
-            if(diffDay > 1)
-            {
-                diffDay--;
-            }
-            else if(diffDay == -1)
-            {
-                diffDay = getDiffFirstTestDayToToday();
-            }
-            if(diffDay > 0)
-            {
-                queryToAdjustTestDates(diffDay);
-            }
-        }
-        public long getDiffLastTestDayToToday()
-        {
-            long diffDay = -1;
-            Date lastTestDay;
-            Date today;
-            if(db == null)
-            {
-                db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
-            }
-
-            try
-            {
-                Cursor cursor = db.rawQuery("select test_date from word_test order by test_date desc limit 1",null);
-                boolean isThereTestLog = (cursor.getCount() != 0);
-                if(isThereTestLog)
-                {
-                    cursor.moveToNext();
-                    lastTestDay = stringToDate(cursor.getString(0));
-                    Calendar calendar = Calendar.getInstance();
-                    today = stringToDate(getStandardFormat().format(calendar.getTime()));
-                    long diffMillis = getDayDifference(today, lastTestDay);
-                    diffDay = TimeUnit.DAYS.convert(diffMillis,TimeUnit.MICROSECONDS);
-                    Log.d("diffDayInTestLog",Long.toString(diffDay));
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.d("adjustTestException",ex.toString());
-                diffDay = -1;
-            }
-            return diffDay;
-        }
-        public long getDiffFirstTestDayToToday()
-        {
-            long diffDay = -1;
-            Cursor cursor = db.rawQuery("SELECT next_test_date FROM word_group",null);
-            boolean isFirstTest = cursor.getCount() == 1;
-            if(isFirstTest) {
-                cursor.moveToNext();
-                Date today = stringToDate(getStandardFormat().format(Calendar.getInstance().getTime()));
-                Date firstTestDay = stringToDate(cursor.getString(0));
-                diffDay = getDayDifference(today, firstTestDay);
-                Log.d("today",today.toString());
-                Log.d("firstDay",firstTestDay.toString());
-                Log.d("diffDay",Long.toString(diffDay));
-            }
-            return diffDay;
-        }
-        public Date stringToDate(String date)
-        {
-            Date lastTestDay = new Date();
-            SimpleDateFormat dateFormat = getStandardFormat();
-
-            if(!date.equals(""));
-            {
-                try {
-                    Log.d("date",date);
-                    lastTestDay = dateFormat.parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            return lastTestDay;
-        }
-        public long getDayDifference(Date substractee, Date substracter)
-        {
-            long diffMillis = substractee.getTime() - substracter.getTime();
-            Log.d("diffMilli",Long.toString(diffMillis));
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(diffMillis);
-            long diffDay = calendar.get(Calendar.DAY_OF_MONTH) - 1;
-            Log.d("diffDay",Long.toString(diffDay));
-            return diffDay;
-        }
-        public void queryToAdjustTestDates(long diffDay)
-        {
-            Log.d("차이값 조정",Long.toString(diffDay));
-            SQLiteDatabase db = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
-            String values[] = {};
-            db.execSQL("update word_group set next_test_date = datetime(next_test_date,'+"+diffDay+" day')",values);
-        }
     }
 }
