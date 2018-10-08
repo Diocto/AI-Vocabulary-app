@@ -104,7 +104,7 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="remainging word number"
+            android:text="remainging nowWord number"
             android:textAlignment="center"
             android:textSize="16sp" />
 
