@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
 import org.andoidtown.ai_vocabulary.R;
-import org.andoidtown.ai_vocabulary.StandardDataManager;
+import org.andoidtown.ai_vocabulary.Manager.StandardDataManager;
 import org.andoidtown.ai_vocabulary.wordtest_component.WordTestActivity;
 
 import java.text.SimpleDateFormat;
@@ -72,18 +73,19 @@ public class WordTestFragment extends Fragment {
         return rootView;
     }
     public void setButtonText() {
+        DateProcessManager myManager = new DateProcessManager();
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String values[] = {dataFormat.format(calendar.getTime())};
-        values[0] = values[0].substring(0,10) + " 00:00:00";
+        String value = myManager.getFormattedDate(calendar.getTime());
+        value = myManager.cutFromYearToDay(value);
+        String values[] = {value};
         Log.d("comapre",values[0]);
-        Cursor cursor = db.rawQuery("select * from word_group where next_test_date =?",values);
+        Cursor cursor = db.rawQuery("select * from word_group where strftime('%Y-%m-%d',next_test_date) = ?",values);
         String textOfButton;
         if (cursor.getCount() != 0)
         {
             cursor.moveToNext();
-            dataFormat = new SimpleDateFormat("yy년 MM월 dd일");
-            String testDate = dataFormat.format(calendar.getTime());
+            SimpleDateFormat koreanDateFormat = new SimpleDateFormat("yy년 MM월 dd일");
+            String testDate = koreanDateFormat.format(calendar.getTime());
             textOfButton = testDate + " 시험\n" + "클릭해서 시험 시작";
             testWordButton.setText(textOfButton);
             testWordButton.setClickable(true);
