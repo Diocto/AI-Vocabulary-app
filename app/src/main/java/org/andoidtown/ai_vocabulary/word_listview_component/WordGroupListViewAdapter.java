@@ -42,24 +42,21 @@ public class WordGroupListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.word_group_listview_item, parent, false);
         }
 
-        TextView wordGroupName = (TextView) convertView.findViewById(R.id.wordListName);
-        TextView memNumber = (TextView) convertView.findViewById(R.id.memWordsNum);
-        TextView notMemNumber =  (TextView) convertView.findViewById(R.id.notMemWordsNum);
+        TextView wordGroupName = (TextView) convertView.findViewById(R.id.text_wordgroupitem_name);
+        TextView nextTestDate =  (TextView) convertView.findViewById(R.id.text_wordgroupitem_nexttestdate);
 
         WordGroupListViewItem listItem = wordLists.get(i);
 
         wordGroupName.setText(listItem.getItemName());
-        memNumber.setText(listItem.getMemorizedNumber());
-        notMemNumber.setText(listItem.getNotMemorizedNumber());
+        nextTestDate.setText(listItem.getNextTestDate());
         return convertView;
     }
 
-    public void addItem(String name, String memNum, String notMemNum)
+    public void addItem(String name, String nextTestDate)
     {
         WordGroupListViewItem item = new WordGroupListViewItem();
         item.setItemName(name);
-        item.setMemorizedNumber(memNum);
-        item.setNotMemorizedNumber(notMemNum);
+        item.setNextTestDate(nextTestDate);
 
         wordLists.add(item);
     }

@@ -45,11 +45,12 @@ public class WordGroupListViewActivity extends AppCompatActivity {
         String aSQL = "select * from word_group";
         try {
             Cursor cursor = db.rawQuery(aSQL, null);
-            Log.d("커서 갯수",Integer.toString(cursor.getColumnCount()));
+            Log.d("커서 갯수",Integer.toString(cursor.getCount()));
             for(int i = 0; i < cursor.getCount(); i++)
             {
                 cursor.moveToNext();
-                adapter.addItem(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+                Log.d("아이템",cursor.getString(0) + cursor.getString(3));
+                adapter.addItem(cursor.getString(0),cursor.getString(3));
             }
         } catch (Exception ex)
         {
