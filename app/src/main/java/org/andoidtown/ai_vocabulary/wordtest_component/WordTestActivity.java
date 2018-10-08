@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
 import org.andoidtown.ai_vocabulary.R;
 import org.andoidtown.ai_vocabulary.WordParceble;
 import org.andoidtown.ai_vocabulary.mainactivity_component.MainActivity;
@@ -32,50 +33,30 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WordTestActivity extends AppCompatActivity
+public class WordTestActivity extends AppCompatActivity implements WordTestContract.View
 {
-    TextSwitcher wordSwitcher;
-    TextView meaningTextView;
-    TextView remainWordTextView;
-    TextView remainGroupTextView;
-    TextView timerTextView;
-    ImageView blind;
-    ArrayList<WordParceble> wordList;;
-    int nowWordIndex = 0;
-    int nowTotalWordIndex = 0;
-    int totalWordNum = 0;
-    ArrayList<WordParceble> incorrectWordList;
-    int correctNum = 0;
-    int inCorrectNum = 0;
-    ArrayList<Integer> groupWordNums;
-    ArrayList<String> groupNames;
-    int nowGroupIndex = 0;
-    int groupNum = 0;
-    AlphaAnimation alphaAnimation;
-    SQLiteDatabase database;
-    SimpleDateFormat dateFormat;
-    Animation slide_in_left, slide_out_right;
-    Timer testTimer;
-    TimerTask testTimerTask;
+    private TextSwitcher wordSwitcher;
+    private TextView meaningTextView;
+    private TextView remainWordTextView;
+    private TextView remainGroupTextView;
+    private TextView timerTextView;
+    private ImageView blind;
+    private WordTestContract.Presenter wordTestPresenter;
+    private AlphaAnimation alphaAnimation;
+    private SQLiteDatabase database;
+    private Animation slide_in_left, slide_out_right;
+    private Timer testTimer;
+    private TimerTask testTimerTask;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_test);
         initViews();
-        loadDBtoLocal();
-        if(groupNum != 0 && wordList.size() != 0)
-        {
-            wordSwitcher.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getWord()));
-            meaningTextView.setText(new StringBuffer(wordList.get(nowTotalWordIndex).getMeaning()));
-        }
-        else
-        {
-            Toast.makeText(this,"ERROR:불러올 단어가 없습니다",Toast.LENGTH_LONG).show();
-            finish();
-        }
-        incorrectWordList = new ArrayList<>();
-        setTextState();
+        Calendar calendar = Calendar.getInstance();
+        wordTestPresenter = new WordTestPresenter(this,this);
+        wordTestPresenter.loadWordList(calendar);
+        wordTestPresenter.setNowWord();
         testTimer = new Timer();
         testTimerTask = new TestTimer();
         testTimer.schedule(testTimerTask,0,1000);
@@ -110,74 +91,62 @@ public class WordTestActivity extends AppCompatActivity
         wordSwitcher.setOutAnimation(slide_out_right);
         timerTextView = findViewById(R.id.text_wordtest_timer);
     }
-
-    private void loadDBtoLocal()
+    @Override
+    public void setTestWord(WordParceble word)
     {
-        wordList = new ArrayList<>();
-        groupWordNums = new ArrayList<>();
-        groupNames = new ArrayList<>();
-        Date currentTime = Calendar.getInstance().getTime();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String today = dateFormat.format(currentTime);
-        String[] values = {today + " 00:00:00"};
-        database = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
-        Cursor groupCursor;
-        try
+        wordSwitcher.setText(word.getWord());
+        meaningTextView.setText(word.getMeaning());
+    }
+    @Override
+    public void setTestProgress(String wordProgress, String groupProgress)
+    {
+        remainGroupTextView.setText(wordProgress);
+        remainWordTextView.setText(groupProgress);
+    }
+    public void onClickYes(final View view){
+        setButtonDelay(view,100);
+        wordTestPresenter.onClickYes();
+    }
+    public void onClickNo(final View view){
+        setButtonDelay(view,100);
+        wordTestPresenter.onClickNo();
+    }
+    public void onClickBlind(View view){
+        blind.setClickable(false);
+        blind.startAnimation(alphaAnimation);
+        blind.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public String getTimerText()
+    {
+        return timerTextView.getText().toString();
+    }
+    @Override
+    public void makeTestExitAlert()
+    {
+        testTimer.cancel();
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+        alert_confirm.setCancelable(false);
+        alert_confirm.setMessage("시험이 종료되었습니다! \n 확인 버튼을 누르면 결과로 넘어갑니다.");
+        alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener()
         {
-            groupCursor=database.rawQuery("select * from word_group where next_test_date = ?", values);
-            groupNum = groupCursor.getCount();
-            for (int i = 0 ; i < groupNum; i++)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
             {
-                groupCursor.moveToNext();
-                String[] group_name = {groupCursor.getString(0)};
-                Cursor wordCursor = database.rawQuery("select * from word where group_name = ?", group_name);
-                groupWordNums.add(wordCursor.getCount());
-                groupNames.add(groupCursor.getString(0));
-                totalWordNum += groupWordNums.get(i);
-                for (int j = 0; j < groupWordNums.get(i); j++)
-                {
-                    wordCursor.moveToNext();
-                    wordList.add(new WordParceble(wordCursor.getString(0), wordCursor.getString(1)));
-                }
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("incorrectList",wordTestPresenter.getIncorrectWordList());
+                Intent intent = new Intent(WordTestActivity.this, InstantIncorrectWordListActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
             }
-        } catch (Exception ex)
-        {
-            Log.d("sql error", ex.toString());
-        }
+        });
+        AlertDialog alert = alert_confirm.create();
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
     }
-
-    public void showNextWord()
-    {
-        behindBlind();
-        nowWordIndex++;
-        nowTotalWordIndex++;
-        if(groupWordNums.get(nowGroupIndex) <= nowWordIndex)
-        {
-            processExitGroupTest();
-        }
-        wordSwitcher.setText(wordList.get(nowTotalWordIndex).getWord());
-        meaningTextView.setText(wordList.get(nowTotalWordIndex).getMeaning());
-        setTextState();
-    }
-
-    public void processExitGroupTest()
-    {
-        String[] values = {groupNames.get(nowGroupIndex)};
-        Cursor groupCursor = database.rawQuery("select * from word_group where group_name = ?",values);
-        Cursor testCursor = database.rawQuery("select * from word_test where group_name = ?",values);
-        Integer testNumber = testCursor.getCount();
-        Integer addNumber = getNextTestDay(testNumber);
-        groupCursor.moveToNext();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, addNumber);
-        String nextTestDate = dateFormat.format(cal.getTime());
-        database.execSQL("update word_group set next_test_date = '" + nextTestDate + "' where group_name = ?", values);
-        nowGroupIndex++;
-        nowWordIndex = 0;
-    }
-
-    private void setButtonDelay(final View view, int milli)
+    private void setButtonDelay(final View view, final int milli)
     {
         view.setEnabled(false); // 클릭 무효화
         Handler h = new Handler();
@@ -190,134 +159,16 @@ public class WordTestActivity extends AppCompatActivity
             }
         }, milli);
     }
-    public void onClickYes(final View view){
-        setButtonDelay(view, 100);
-        correctNum++;
-        String nowWord = wordList.get(nowTotalWordIndex).getWord();
-        String[] values = {nowWord};
-        try
-        {
-            database.execSQL("update word set correct_answer_num = correct_answer_num + 1 where value = ?",values);
-        } catch (Exception ex)
-        {
-            Log.d("SQLerror",ex.toString());
-        }
-        if(isFinalWord())
-        {
-            processExitGroupTest();
-            processExitAllTest();
-        }
-        else
-        {
-            showNextWord();
-        }
-    }
-    public void onClickNo(final View view){
-        setButtonDelay(view, 100);
-        inCorrectNum++;
-        String nowWord = wordList.get(nowTotalWordIndex).getWord();
-        String nowMeaning = wordList.get(nowTotalWordIndex).getMeaning();
-        String[] values = {nowWord};
-        incorrectWordList.add(new WordParceble(nowWord, nowMeaning));
-        try
-        {
-            database.execSQL("update word set incorrect_answer_num = incorrect_answer_num + 1 where value = ?",values);
-        } catch (Exception ex)
-        {
-            Log.d("SQLerror",ex.toString());
-        }
-        if(isFinalWord())
-        {
-            processExitGroupTest();
-            processExitAllTest();
-        }
-        else
-        {
-            showNextWord();
-        }
-    }
-    public void processExitAllTest()
-    {
-        Date date = Calendar.getInstance().getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String today = dateFormat.format(date);
-        String values[] = {today, Integer.toString(correctNum),Integer.toString(inCorrectNum),timerTextView.getText().toString()};
-        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time)" +
-                " values(?,?,?,?)",values);
-        testTimer.cancel();
-        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
-        alert_confirm.setCancelable(false);
-        alert_confirm.setMessage("시험이 종료되었습니다! \n 확인 버튼을 누르면 결과로 넘어갑니다.");
-        alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("incorrectList",incorrectWordList);
-                Intent intent = new Intent(WordTestActivity.this, InstantIncorrectWordListActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
-            }
-        });
-        AlertDialog alert = alert_confirm.create();
-        alert.setCancelable(false);
-        alert.setCanceledOnTouchOutside(false);
-        alert.show();
-    }
-    public void setTextState()
-    {
-        String remainGruop = "단어뭉치 " + (nowGroupIndex + 1) + "/" + groupWordNums.size();
-        String remainWord = "단어" + (nowWordIndex + 1) + "/" + groupWordNums.get(nowGroupIndex);
-
-        remainGroupTextView.setText(remainGruop);
-        remainWordTextView.setText(remainWord);
-    }
-    public boolean isFinalWord()
-    {
-        if (inCorrectNum + correctNum == totalWordNum)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public void onClickBlind(View view){
-        blind.setClickable(false);
-        blind.startAnimation(alphaAnimation);
-        blind.setVisibility(View.INVISIBLE);
-    }
-    public int getNextTestDay(int testNumber)
-    {
-        switch (testNumber)
-        {
-            case 0:
-                return 1;
-            case 1:
-                return 1;
-            case 2:
-                return 1;
-            case 3:
-                return 3;
-            case 4:
-                return 4;
-            case 5:
-                return 8;
-            case 6:
-                return 15;
-            default:
-                return 0;
-        }
-    }
-    public void behindBlind()
+    public void coverBlind()
     {
         blind.setClickable(true);
         blind.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void setPresenter(WordTestContract.Presenter presenter) {
+        this.wordTestPresenter = presenter;
+    }
     class TestTimer extends TimerTask
     {
         private long startTimeMillis;

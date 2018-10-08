@@ -4,12 +4,38 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class WordParceble implements Parcelable {
+    private String word;
+    private String meaning;
+    private String group_name;
+    private int correctNum;
+    private int incorrectNum;
+    private String id;
+    public String getGroup_name() {
+        return group_name;
+    }
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+    public String getId() {
+        return word;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
     public WordParceble(String word, String meaning)
     {
         this.word = word;
         this.meaning = meaning;
         this.correctNum = 0;
         this.incorrectNum = 0;
+    }
+    public WordParceble(String word, String meaning, String group_name)
+    {
+        this.word = word;
+        this.meaning = meaning;
+        this.correctNum = 0;
+        this.incorrectNum = 0;
+        this.group_name = group_name;
     }
     public WordParceble(Parcel in)
     {
@@ -51,10 +77,6 @@ public class WordParceble implements Parcelable {
         this.incorrectNum = incorrectNum;
     }
 
-    private String word;
-    private String meaning;
-    private int correctNum;
-    private int incorrectNum;
 
     @SuppressWarnings("rawtypes")
     public static final Parcelable.Creator<WordParceble> CREATOR =
