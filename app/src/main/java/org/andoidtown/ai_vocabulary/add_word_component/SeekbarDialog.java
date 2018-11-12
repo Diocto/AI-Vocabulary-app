@@ -43,7 +43,6 @@ public class SeekbarDialog extends Dialog{
             @Override
             public void onClick(View view)
             {
-                Log.d("hi",parentActivity.toString());
                 parentActivity.setEditTextNum(Integer.parseInt(barValue.getText().toString()));
                 parentActivity.notifyListViewDataChanged();
                 Toast.makeText(parentActivity,"확인 버튼이 클릭됨",Toast.LENGTH_LONG);

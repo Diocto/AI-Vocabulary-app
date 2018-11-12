@@ -34,7 +34,7 @@
             android:id="@+id/seekBar_addword_wordnumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="300"
+            android:max="100"
             tools:layout_editor_absoluteX="188dp"
             tools:layout_editor_absoluteY="137dp" />
 
