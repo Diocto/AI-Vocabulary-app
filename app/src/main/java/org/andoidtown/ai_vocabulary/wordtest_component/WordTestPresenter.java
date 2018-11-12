@@ -3,6 +3,7 @@ package org.andoidtown.ai_vocabulary.wordtest_component;
 import android.content.Context;
 import android.util.Log;
 
+import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
 import org.andoidtown.ai_vocabulary.WordParceble;
 
 import java.util.ArrayList;
@@ -12,34 +13,43 @@ public class WordTestPresenter implements WordTestContract.Presenter
 {
     private WordTestContract.View wordTestView;
     private WordTestRepository wordTestRepository;
+    private Calendar lastTestTimeCalender;
+    private DateProcessManager timeProcessManager;
     public WordTestPresenter(WordTestContract.View wordTestView, Context contextUsingDB)
     {
         this.wordTestView = wordTestView;
         this.wordTestRepository = new WordTestRepository(contextUsingDB);
+        lastTestTimeCalender = Calendar.getInstance();
+        lastTestTimeCalender.set(Calendar.HOUR,0);
+        lastTestTimeCalender.set(Calendar.MINUTE,0);
+        lastTestTimeCalender.set(Calendar.SECOND,0);
+        lastTestTimeCalender.set(Calendar.MILLISECOND,0);
+        timeProcessManager = new DateProcessManager();
+        timeProcessManager.setDateFormat("hh:mm:ss");
     }
 
     @Override
     public void loadWordList(Calendar date) {
-        wordTestRepository.loadTodaysWords();
+        wordTestRepository.setTestWordList(date);
     }
     @Override
     public boolean moveNextWord() {
-        int state = wordTestRepository.moveToNextWord();
-        if(state == 0)
-        {
-            return true;
-        }
-        else if(state == 1)
+        if(wordTestRepository.isNowLastWord())
         {
             processExitGroupTest();
-            return true;
+            processExitAllTest();
+            return false;
+        }
+        else if(wordTestRepository.isNowEndOfGroup())
+        {
+            processExitGroupTest();
+            wordTestRepository.moveToNextWord();
         }
         else
         {
-            processExitGroupTest();
-            processExitAllTest(wordTestView.getTimerText());
-            return false;
+            wordTestRepository.moveToNextWord();
         }
+        return true;
     }
     @Override
     public void setNowWord()
@@ -52,14 +62,28 @@ public class WordTestPresenter implements WordTestContract.Presenter
     }
     @Override
     public void processExitGroupTest() {
-        Log.d("테스트1",wordTestRepository.getNowGroupName());
-        int nowGroupTestNumber = wordTestRepository.getGroupsTestNumber(wordTestRepository.getNowGroupName());
-        int addNextTestNumber = getNextTestDay(nowGroupTestNumber);
-        wordTestRepository.increaseNextTestDate(addNextTestNumber, wordTestRepository.getNowGroupName());
+        Log.d("그룹테스트종료",wordTestRepository.getNowGroupName());
+        insertNowTestData();
+        increaseNextTestDate();
     }
-    @Override
-    public void processExitAllTest(String testTime) {
+
+    private void increaseNextTestDate() {
+        int groupTestNumber = wordTestRepository.getGroupsTestNumber(wordTestRepository.getNowGroupName());
+        int increaseNumber = getNextTestDay(groupTestNumber);
+        wordTestRepository.increaseNextTestDate(increaseNumber, wordTestRepository.getNowGroupName());
+    }
+
+    private void insertNowTestData() {
+        long testTimeMillis = timeProcessManager.stringToDate(wordTestView.getTimerText()).getTime();
+        long lastTestTimeMillis = lastTestTimeCalender.getTime().getTime();
+        testTimeMillis = testTimeMillis - lastTestTimeMillis;
+        String testTime = timeProcessManager.millisToString(testTimeMillis);
+        Log.d("testTime",testTime + "\n" + Long.toString(testTimeMillis));
         wordTestRepository.insertNewWordTestData(testTime);
+    }
+
+    @Override
+    public void processExitAllTest() {
         wordTestView.makeTestExitAlert();
     }
     @Override
@@ -71,7 +95,7 @@ public class WordTestPresenter implements WordTestContract.Presenter
     @Override
     public void onClickYes() {
         wordTestRepository.increaseNowWordsCorrectNumber();
-        if(moveNextWord() == true) {
+        if(moveNextWord()) {
             wordTestView.coverBlind();
             setNowWord();
         }
@@ -80,7 +104,7 @@ public class WordTestPresenter implements WordTestContract.Presenter
     @Override
     public void onClickNo() {
         wordTestRepository.increaseNowWordsIncorrectNumber();
-        if(moveNextWord() == true) {
+        if(moveNextWord()) {
             wordTestView.coverBlind();
             setNowWord();
         }

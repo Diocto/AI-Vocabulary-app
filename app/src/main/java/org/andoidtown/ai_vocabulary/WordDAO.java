@@ -16,8 +16,8 @@ public class WordDAO extends SQLiteOpenHelper
 {
     public SQLiteDatabase database;
     private static WordDAO singleTone;
-    public static final int DB_VERSION = 1;
-    public static final String DBFILE_CONTACT = "vocabularyDataBase";
+    private static final int DB_VERSION = 1;
+    private static final String DBFILE_CONTACT = "vocabularyDataBase";
     private WordDAO(Context context)
     {
         super(context, DBFILE_CONTACT, null, DB_VERSION);
@@ -51,13 +51,13 @@ public class WordDAO extends SQLiteOpenHelper
         }
         return singleTone;
     }
-    public ArrayList<ArrayList<WordParceble> > getTodaysWordTest()
+    public ArrayList<ArrayList<WordParceble> > getWordTestList(Calendar date)
     {
         ArrayList<ArrayList<WordParceble>> wordGroupList = new ArrayList<>();
         DateProcessManager dateProcessManager = new DateProcessManager();
-        String today = dateProcessManager.getTodayDate();
-        today = dateProcessManager.cutFromYearToDay(today);
-        String todayDate[] = {today};
+        String testDay = dateProcessManager.getFormattedDate(date);
+        testDay = dateProcessManager.cutFromYearToDay(testDay);
+        String todayDate[] = {testDay};
         String groupSql = "SELECT * FROM word_group WHERE strftime('%Y-%m-%d',next_test_date) = ?";
         Cursor wordGroupCursor = database.rawQuery(groupSql, todayDate);
         if(wordGroupCursor.getCount() != 0)
@@ -79,8 +79,10 @@ public class WordDAO extends SQLiteOpenHelper
                         wordGroupList.get(group_i).add(word);
                     }
                 }
+                wordCursor.close();
             }
         }
+        wordGroupCursor.close();
         return wordGroupList;
     }
     public void increseIncorrectNum(WordParceble word)
@@ -93,10 +95,11 @@ public class WordDAO extends SQLiteOpenHelper
         String values[] = {word.getWord()};
         database.execSQL("UPDATE word SET correct_answer_num = correct_answer_num + 1 WHERE value = ?");
     }
-    public void insertWordTest(String[] values)
+    public void insertWordTest(String testDate, int correctNum, int incorrectNum, String testTime, String groupName)
     {
-        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time)" +
-                " values(?,?,?,?)",values);
+        String[] values = {testDate, Integer.toString(correctNum), Integer.toString(incorrectNum), testTime, groupName};
+        database.execSQL("insert into word_test(test_date, correct_answer_num, incorrect_answer_num, test_time, group_name)" +
+                " values(?,?,?,?,?)",values);
     }
     public void increaseNextTestDate(int increaseNumber, String group_name)
     {
@@ -108,6 +111,7 @@ public class WordDAO extends SQLiteOpenHelper
     {
         Cursor testCursor = database.rawQuery("select * from word_test where group_name = ?",group_name);
         Integer testNumber = testCursor.getCount();
+        testCursor.close();
         return testNumber;
     }
 

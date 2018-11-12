@@ -1,6 +1,5 @@
 package org.andoidtown.ai_vocabulary.wordtest_component;
 
-import android.app.Activity;
 import android.content.Context;
 
 import org.andoidtown.ai_vocabulary.Manager.DateProcessManager;
@@ -15,8 +14,8 @@ public class WordTestRepository
 {
     private int nowWordIndex;
     private int nowGroupIndex;
-    private int testCorrectWordNum;
-    private int testIncorrectWordNum;
+    private int correctWordNum;
+    private int incorrectWordNum;
     private ArrayList<ArrayList<WordParceble>> groupList;
     private ArrayList<WordParceble> incorrectWordList;
     private DateProcessManager dateProcessManager;
@@ -52,9 +51,9 @@ public class WordTestRepository
     {
         return this.groupList.size();
     }
-    public void loadTodaysWords()
+    public void setTestWordList(Calendar date)
     {
-        groupList = wordDAO.getTodaysWordTest();
+        groupList = wordDAO.getWordTestList(date);
         nowWordIndex = 0;
         nowGroupIndex = 0;
     }
@@ -63,35 +62,36 @@ public class WordTestRepository
         return nowGroupIndex == groupList.size() -1 &&
                 nowWordIndex == groupList.get(nowGroupIndex).size()-1;
     }
-    //0 : normal state
-    //1 : group test exit
-    //2 : all test exit
-    public int moveToNextWord()
+    public boolean isNowEndOfGroup()
+    {
+        return nowWordIndex == groupList.get(nowGroupIndex).size()-1;
+    }
+    public boolean moveToNextWord()
     {
         if(isNowLastWord())
         {
-            return 2;
+            return false;
         }
-        else if(nowWordIndex == groupList.get(nowGroupIndex).size()-1)
+        else if(isNowEndOfGroup())
         {
             nowWordIndex = 0;
             nowGroupIndex++;
-            return 1;
+            return true;
         }
         else
         {
             nowWordIndex++;
-            return 0;
+            return true;
         }
     }
     public void increaseNowWordsCorrectNumber()
     { 
-        testCorrectWordNum++;
+        correctWordNum++;
         wordDAO.increseCorrectNum(getNowWord());
     }
     public void increaseNowWordsIncorrectNumber()
     { 
-        testIncorrectWordNum++;
+        incorrectWordNum++;
         wordDAO.increseIncorrectNum(getNowWord());
         addIncorrectWord(getNowWord());
     }
@@ -125,9 +125,7 @@ public class WordTestRepository
     {
         Date date = Calendar.getInstance().getTime();
         String today = dateProcessManager.getFormattedDate(date);
-        String values[] = {today, Integer.toString(testCorrectWordNum),
-                Integer.toString(testIncorrectWordNum),testTime};
-        wordDAO.insertWordTest(values);
+        wordDAO.insertWordTest(today, correctWordNum, incorrectWordNum, testTime, getNowGroupName());
     }
 
 }

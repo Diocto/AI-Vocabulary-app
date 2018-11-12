@@ -14,7 +14,7 @@ public interface WordTestContract {
         boolean moveNextWord();
         void setNowWord();
         void processExitGroupTest();
-        void processExitAllTest(String testTime);
+        void processExitAllTest();
         void onClickYes();
         void onClickNo();
         ArrayList<WordParceble> getIncorrectWordList();
