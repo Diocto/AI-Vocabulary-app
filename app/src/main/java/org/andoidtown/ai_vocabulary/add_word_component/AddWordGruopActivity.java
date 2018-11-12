@@ -41,7 +41,6 @@ public class AddWordGruopActivity extends AppCompatActivity {
             adapter.addNewItem();
         }
         adapter.notifyDataSetChanged();
-        Toast.makeText(this,"데이터 갱신됨",Toast.LENGTH_LONG);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +91,20 @@ public class AddWordGruopActivity extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             DateProcessManager dateProcessManager = new DateProcessManager();
             String value = dateProcessManager.getFormattedDate(calendar.getTime());
+            value = dateProcessManager.cutFromYearToDay(value);
             String values[] = {value};
             SQLiteDatabase db = openOrCreateDatabase(MainActivity.databaseName,MODE_PRIVATE,null);
-            Cursor cursor = db.rawQuery("select * from word_group where next_test_date = ?",values);
+            Log.d("addword","today is" + value);
+            Cursor cursor = db.rawQuery("select * from word_group where strftime('%Y-%m-%d',next_test_date) = ?",values);
             if (cursor.getCount() > 0)
             {
                 thereIsTodaysTest = true;
                 Log.d("테스트 결과","오늘 테스트 있음");
             }
+            cursor.close();
         } catch(Exception ex)
         {
-            Log.d("SQLerror",ex.toString());
+            Log.d("SQLERROR 오늘테스트찾기",ex.toString());
         }
         return thereIsTodaysTest;
     }
@@ -135,7 +137,6 @@ public class AddWordGruopActivity extends AppCompatActivity {
         insertWGToDB(groupName, db);
 
         finish();
-        return;
     }
 
     private void insertWGToDB(String groupName, SQLiteDatabase db) {
