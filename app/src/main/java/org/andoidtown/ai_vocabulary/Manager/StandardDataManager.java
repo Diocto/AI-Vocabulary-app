@@ -13,4 +13,31 @@ public class StandardDataManager {
     {
         return "correct_answer_num > 5";
     }
+    static public String getCreateWordGroupTableSQL()
+    {
+        return "CREATE TABLE word_group (" +
+                "group_name text PRIMARY KEY," +
+                "registered_date datetime," +
+                "num_of_test integer," +
+                "next_test_date datetime)";
+    }
+    static public String getCreateWordTestTableSQL()
+    {
+        return "CREATE TABLE word_test (" +
+                "test_date date," +
+                "correct_answer_num integer," +
+                "incorrect_answer_num integer," +
+                "test_time datetime," +
+                "group_name text" +
+                ")";
+    }
+    static public String getCreateWordTableSQL()
+    {
+        return "create table word(" +
+                "value text," +
+                "meaning text," +
+                "correct_answer_num integer," +
+                "incorrect_answer_num integer," +
+                "group_name text)";
+    }
 }

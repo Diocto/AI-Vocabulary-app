@@ -40,9 +40,18 @@ public class DateProcessManager{
         }
         return formattedDateString;
     }
+    public String millisToString(long timeMillis)
+    {
+        return dateFormat.format(timeMillis);
+    }
     public String getFormattedDate(Date date)
     {
         String formattedDateString = dateFormat.format(date);
+        return formattedDateString;
+    }
+    public String getFormattedDate(Calendar cal)
+    {
+        String formattedDateString = getFormattedDate(cal.getTime());
         return formattedDateString;
     }
     public void setDateFormat(String format)
